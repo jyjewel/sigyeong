@@ -91,3 +91,20 @@ src/
 - 스프라이트의 `fx` 값으로 장면 전체에 상태를 걸 수 있습니다. 예를 들어 〈旅夜書懷〉 7구의 보기는 배의 움직임을, 〈靜夜思〉 4구의 보기는 시인의 고개 숙임을 바꿉니다.
 - 원문은 『唐詩三百首』 통행본을 따랐습니다. 이문(異文)이 있는 곳(〈靜夜思〉, 〈黃鶴樓送孟浩然之廣陵〉 3구)은 작품 해설에 밝혔습니다.
 - 구별 번역과 해설은 작업용 초안입니다. `src/data/poems/denggao.ts`에서 바로 고칠 수 있습니다.
+
+## AI 판: 내 시로 만들기 (`ai-prototype` 브랜치)
+
+Claude 아티팩트로 게시하는 판입니다. 보는 사람이 한시 원문을 넣으면, 그 사람의 Claude 계정(아티팩트의 `sample` 기능)으로
+구절별 문제와 '그리기 설명(JSON)'을 만들고, 게임이 정해진 부품만 해석해 픽셀 풍경으로 그립니다.
+AI가 만든 코드는 실행하지 않습니다. 만든 작품은 보는 사람의 브라우저에만 저장됩니다.
+
+```bash
+npm run build:artifact   # dist-artifact/page.html → Claude 아티팩트로 게시 (capabilities: sample)
+```
+
+- `src/ai/art.ts` 그리기 부품 목록과 해석기 (부품을 늘리면 프롬프트 설명도 같이 바뀝니다)
+- `src/ai/generate.ts` 프롬프트, Claude 호출, 답 검사
+- `src/ai/store.ts` 브라우저 저장
+- `src/components/Create.tsx` 「내 시로 만들기」 화면
+
+GitHub Pages 판(`main`, `npm run build`)에는 이 기능이 들어가지 않습니다. Claude 계정 없이는 AI를 쓸 수 없기 때문입니다.
