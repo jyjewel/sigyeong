@@ -887,3 +887,82 @@ img.pixel {
     animation-delay: 0s !important;
   }
 }
+
+/* ── 내 시로 만들기 (아티팩트 판) ─────────── */
+.title-card .create-entry {
+  margin-top: 12px;
+  width: 100%;
+  border-style: dashed;
+}
+.create-form,
+.create-result {
+  padding: 16px;
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.create-form p,
+.create-result p {
+  margin: 0;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.field textarea,
+.field input {
+  font: inherit;
+  font-family: var(--han);
+  font-size: 1.15rem;
+  color: var(--ink);
+  background: #fbf6e8;
+  border: 2px solid var(--frame-2);
+  border-radius: 3px;
+  padding: 8px 10px;
+  letter-spacing: 0.12em;
+}
+.field textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+.field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.create-count {
+  align-self: center;
+}
+.create-status {
+  color: var(--ink-soft);
+  animation: pulse 1.6s infinite;
+}
+.create-warn {
+  color: var(--red);
+  font-weight: 600;
+}
+.create-result h2 {
+  margin: 0;
+}
+.create-result figure {
+  margin: 0;
+}
+.create-result .thumb {
+  max-width: 720px;
+}
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .compare {
+    grid-template-columns: 1fr;
+  }
+}

@@ -66,6 +66,10 @@ export interface Poem {
   scenes: Scene[]
   /** 완성 장면에서 쓸 장면 id (기본: 마지막 장면) */
   finaleScene?: string
+  /** 시인 목록(POETS)에 없는 시인의 이름. 사용자가 만든 작품에서 쓴다 */
+  poetName?: string
+  /** AI가 생성한 작품이면 true (검토 전 표시) */
+  aiGenerated?: boolean
 }
 
 export interface Badge {

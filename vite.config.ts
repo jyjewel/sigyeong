@@ -4,8 +4,12 @@ import { viteSingleFile } from 'vite-plugin-singlefile'
 
 // `npm run build`        → dist/ (일반 정적 배포용)
 // `npm run build:single` → dist-single/index.html (파일 하나로 실행되는 버전)
-export default defineConfig(({ mode }) => ({
-  base: './',
-  plugins: mode === 'single' ? [react(), viteSingleFile()] : [react()],
-  build: mode === 'single' ? { outDir: 'dist-single' } : {},
-}))
+// `npm run build:artifact` → dist-artifact/index.html (Claude 아티팩트 판, 「내 시로 만들기」 포함)
+export default defineConfig(({ mode }) => {
+  const single = mode === 'single' || mode === 'artifact'
+  return {
+    base: './',
+    plugins: single ? [react(), viteSingleFile()] : [react()],
+    build: single ? { outDir: mode === 'artifact' ? 'dist-artifact' : 'dist-single' } : {},
+  }
+})

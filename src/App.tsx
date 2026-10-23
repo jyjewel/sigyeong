@@ -9,6 +9,12 @@ import { SpriteSheet } from './components/SpriteSheet'
 import { loadSave, markSaved, recordCompletion, writeSave } from './game/storage'
 import type { AnswerLog, SaveData } from './game/storage'
 import { setMuted } from './game/sound'
+import { Create } from './components/Create'
+import { loadUserPoems } from './ai/store'
+import type { GeneratedPoem } from './ai/generate'
+
+/** 「내 시로 만들기」는 Claude 아티팩트 판(`npm run build:artifact`)에만 넣는다 */
+const AI = import.meta.env.MODE === 'artifact'
 
 type Screen =
   | { kind: 'title' }
@@ -18,6 +24,7 @@ type Screen =
   | { kind: 'collection' }
   | { kind: 'select' }
   | { kind: 'sprites' }
+  | { kind: 'create' }
 
 /** 완성 상태의 레이어 (도감에서 다시 보기용) */
 function fullLayers(poem: Poem) {
@@ -28,6 +35,8 @@ function fullLayers(poem: Poem) {
 
 export default function App() {
   const [save, setSave] = useState<SaveData>(() => loadSave())
+  // 화면 상태보다 먼저 등록해야 #finale-작품id 로 바로 열 수 있다
+  const [userPoems, setUserPoems] = useState<GeneratedPoem[]>(() => (AI ? loadUserPoems() : []))
   const [screen, setScreen] = useState<Screen>(() =>
     location.hash === '#sprites'
       ? { kind: 'sprites' }
@@ -68,6 +77,11 @@ export default function App() {
               <button onClick={() => setScreen({ kind: 'select' })}>작품 선택</button>
               <button onClick={() => setScreen({ kind: 'collection' })}>도감</button>
             </div>
+            {AI && (
+              <button className="create-entry" onClick={() => setScreen({ kind: 'create' })}>
+                ✎ 내 시로 만들기 <span className="small muted">시제품</span>
+              </button>
+            )}
           </div>
         </div>
       )
@@ -79,7 +93,7 @@ export default function App() {
         <Play
           key={screen.run}
           poem={poem}
-          onExit={() => setScreen({ kind: 'title' })}
+          onExit={() => setScreen({ kind: poem.aiGenerated ? 'create' : 'title' })}
           onFinish={(r) => {
             setSave((s) => recordCompletion(s, poem.id, r.perfect, r.answers, r.thumbnail))
             setScreen({ kind: 'finale', poemId: poem.id, placed: r.placed, perfect: r.perfect, answers: r.answers })
@@ -102,6 +116,7 @@ export default function App() {
           saved={!!save.records[poem.id]?.saved}
           onSave={() => setSave((s) => markSaved(s, poem.id))}
           onNext={() => {
+            if (poem.aiGenerated) return setScreen({ kind: 'create' })
             const playable = CATALOG.filter((e) => e.playable)
             const idx = playable.findIndex((e) => e.id === poem.id)
             const rest = [...playable.slice(idx + 1), ...playable.slice(0, idx)]
@@ -139,6 +154,17 @@ export default function App() {
           onPlay={start}
           onReplay={(id) => setScreen({ kind: 'replay', poemId: id })}
           onBack={() => setScreen({ kind: 'title' })}
+        />
+      )
+      break
+    case 'create':
+      body = (
+        <Create
+          poems={userPoems}
+          onChange={setUserPoems}
+          onPlay={start}
+          onBack={() => setScreen({ kind: 'title' })}
+          layersOf={fullLayers}
         />
       )
       break

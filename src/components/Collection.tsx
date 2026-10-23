@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CATALOG, getPoet } from '../data/catalog'
+import { CATALOG, poetNameOf } from '../data/catalog'
 import type { CatalogEntry } from '../data/types'
 import { poetProgress, totalProgress } from '../game/storage'
 import type { SaveData } from '../game/storage'
@@ -98,7 +98,7 @@ export function Collection({ save, mode, onPlay, onReplay, onBack }: Props) {
                 <>
                   <h2>
                     <span className="han">{poem.title}</span>{' '}
-                    <span className="han muted">{getPoet(poem.poetId)?.name}</span>
+                    <span className="han muted">{poetNameOf(poem)}</span>
                   </h2>
                   <p className="small muted">
                     {poem.era} · {poem.form} · {rec ? `${new Date(rec.completedAt).toLocaleDateString('ko-KR')} 완료 · ${rec.plays}회` : ''}
