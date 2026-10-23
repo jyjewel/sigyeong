@@ -1,0 +1,106 @@
+import type { CatalogEntry, Poem, Poet } from './types'
+import { denggao } from './poems/denggao'
+import { chunwang } from './poems/chunwang'
+import { lvye } from './poems/lvye'
+import { jingyesi } from './poems/jingyesi'
+import { huanghelou } from './poems/huanghelou'
+import { luzhai } from './poems/luzhai'
+import { shanju } from './poems/shanju'
+import { chunxiao, fengqiao, guanque, jiangxue, xiajiangling } from './poems/batch2a'
+import { chuzhou, jiandejiang, qinhuai, wuyixiang, zhuliguan } from './poems/batch2b'
+
+// 시인 목록과 배지
+export const POETS: Poet[] = [
+  {
+    id: 'dufu',
+    name: '杜甫',
+    era: '唐',
+    badge: { id: 'dufu-journey', name: '두보의 여행', description: '수록된 두보의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'libai',
+    name: '李白',
+    era: '唐',
+    badge: { id: 'libai-moon', name: '이백의 달', description: '수록된 이백의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'wangwei',
+    name: '王維',
+    era: '唐',
+    badge: { id: 'wangwei-landscape', name: '왕유의 산수', description: '수록된 왕유의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'menghaoran',
+    name: '孟浩然',
+    era: '唐',
+    badge: { id: 'menghaoran-spring', name: '맹호연의 봄잠', description: '수록된 맹호연의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'wangzhihuan',
+    name: '王之渙',
+    era: '唐',
+    badge: { id: 'wangzhihuan-tower', name: '왕지환의 누각', description: '수록된 왕지환의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'zhangji',
+    name: '張繼',
+    era: '唐',
+    badge: { id: 'zhangji-bell', name: '장계의 종소리', description: '수록된 장계의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'weiyingwu',
+    name: '韋應物',
+    era: '唐',
+    badge: { id: 'weiyingwu-ferry', name: '위응물의 나루', description: '수록된 위응물의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'liuzongyuan',
+    name: '柳宗元',
+    era: '唐',
+    badge: { id: 'liuzongyuan-snow', name: '유종원의 눈', description: '수록된 유종원의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'liuyuxi',
+    name: '劉禹錫',
+    era: '唐',
+    badge: { id: 'liuyuxi-swallow', name: '유우석의 제비', description: '수록된 유우석의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'dumu',
+    name: '杜牧',
+    era: '唐',
+    badge: { id: 'dumu-river', name: '두목의 진회', description: '수록된 두목의 작품을 모두 완성했습니다.' },
+  },
+]
+
+// 도감 목록. 새 작품은 poem 객체를 만들어 playable: true 로 등록한다.
+// playable: false 항목은 '준비 중' 으로만 표시된다.
+export const CATALOG: CatalogEntry[] = [
+  { id: 'denggao', title: '登高', poetId: 'dufu', playable: true, poem: denggao, tags: ['七言律詩', '가을', '나그네'] },
+  { id: 'chunwang', title: '春望', poetId: 'dufu', playable: true, poem: chunwang, tags: ['五言律詩', '봄', '전란'] },
+  { id: 'lvyeshuhuai', title: '旅夜書懷', poetId: 'dufu', playable: true, poem: lvye, tags: ['五言律詩', '밤', '나그네'] },
+  { id: 'jingyesi', title: '靜夜思', poetId: 'libai', playable: true, poem: jingyesi, tags: ['五言絶句', '밤', '고향'] },
+  { id: 'huanghelou', title: '黃鶴樓送孟浩然之廣陵', poetId: 'libai', playable: true, poem: huanghelou, tags: ['七言絶句', '봄', '이별'] },
+  { id: 'luzhai', title: '鹿柴', poetId: 'wangwei', playable: true, poem: luzhai, tags: ['五言絶句', '저녁', '산수'] },
+  { id: 'shanjuqiuming', title: '山居秋暝', poetId: 'wangwei', playable: true, poem: shanju, tags: ['五言律詩', '가을', '산수'] },
+  { id: 'chunxiao', title: '春曉', poetId: 'menghaoran', playable: true, poem: chunxiao, tags: ['五言絶句', '봄', '아침'] },
+  { id: 'jiandejiang', title: '宿建德江', poetId: 'menghaoran', playable: true, poem: jiandejiang, tags: ['五言絶句', '저녁', '나그네'] },
+  { id: 'xiajiangling', title: '下江陵', poetId: 'libai', playable: true, poem: xiajiangling, tags: ['七言絶句', '아침', '강'] },
+  { id: 'zhuliguan', title: '竹里館', poetId: 'wangwei', playable: true, poem: zhuliguan, tags: ['五言絶句', '밤', '은거'] },
+  { id: 'guanquelou', title: '登鸛雀樓', poetId: 'wangzhihuan', playable: true, poem: guanque, tags: ['五言絶句', '저녁', '누각'] },
+  { id: 'fengqiao', title: '楓橋夜泊', poetId: 'zhangji', playable: true, poem: fengqiao, tags: ['七言絶句', '밤', '나그네'] },
+  { id: 'chuzhouxijian', title: '滁州西澗', poetId: 'weiyingwu', playable: true, poem: chuzhou, tags: ['七言絶句', '봄', '시내'] },
+  { id: 'jiangxue', title: '江雪', poetId: 'liuzongyuan', playable: true, poem: jiangxue, tags: ['五言絶句', '겨울', '강'] },
+  { id: 'wuyixiang', title: '烏衣巷', poetId: 'liuyuxi', playable: true, poem: wuyixiang, tags: ['七言絶句', '저녁', '회고'] },
+  { id: 'boqinhuai', title: '泊秦淮', poetId: 'dumu', playable: true, poem: qinhuai, tags: ['七言絶句', '밤', '회고'] },
+]
+
+export function getPoem(id: string): Poem | undefined {
+  return CATALOG.find((e) => e.id === id)?.poem
+}
+
+export function getPoet(id: string): Poet | undefined {
+  return POETS.find((p) => p.id === id)
+}
+
+export const FIRST_POEM_ID = 'denggao'

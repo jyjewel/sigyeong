@@ -1,0 +1,888 @@
+:root {
+  --paper: #efe4c8;
+  --paper-2: #e4d6b2;
+  --paper-3: #d6c49a;
+  --ink: #2b1f15;
+  --ink-soft: #5d4a37;
+  --frame: #3b2a1d;
+  --frame-2: #5a4330;
+  --gold: #d9a441;
+  --gold-soft: #f3d58a;
+  --red: #b2352a;
+  --green: #4f6b3a;
+  --bg: #e6d8b6;
+  --bg-2: #ddcca6;
+  --han: 'Noto Serif TC', 'Noto Serif KR', 'Songti TC', 'PMingLiU', serif;
+  --kr: 'Noto Serif KR', 'Apple SD Gothic Neo', serif;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  background-image: radial-gradient(circle at 50% 0%, #f1e7cf 0%, var(--bg) 70%);
+  color: var(--ink);
+  font-family: var(--kr);
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--frame);
+  border-radius: 3px;
+  padding: 0.55em 1em;
+  box-shadow: 0 3px 0 var(--frame);
+  transition: transform 0.08s, box-shadow 0.08s, background 0.15s;
+}
+button:hover:not(:disabled) {
+  background: #f7eed6;
+}
+button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--frame);
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+button:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+button.primary {
+  background: var(--frame);
+  color: var(--paper);
+  border-color: #1b120b;
+  box-shadow: 0 3px 0 #120c07;
+}
+button.primary:hover:not(:disabled) {
+  background: #4d3826;
+}
+button.ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: transparent;
+  box-shadow: none;
+}
+button.ghost:hover:not(:disabled) {
+  background: rgba(59, 42, 29, 0.08);
+}
+button.small {
+  font-size: 0.85rem;
+  padding: 0.35em 0.7em;
+}
+button.big {
+  font-size: 1.1rem;
+  padding: 0.8em 1.4em;
+}
+
+.han {
+  font-family: var(--han);
+}
+.muted {
+  color: var(--ink-soft);
+}
+.small {
+  font-size: 0.85rem;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.row.center {
+  justify-content: center;
+}
+
+canvas.pixel,
+img.pixel {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.frame {
+  border: 3px solid var(--frame);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 2px #c9b48a,
+    0 4px 0 #160f0a;
+}
+.paper {
+  background: var(--paper);
+  background-image:
+    radial-gradient(rgba(120, 90, 50, 0.07) 1px, transparent 1px),
+    radial-gradient(rgba(120, 90, 50, 0.05) 1px, transparent 1px);
+  background-size: 7px 7px, 11px 11px;
+  background-position: 0 0, 3px 5px;
+}
+
+.mute {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 60;
+  opacity: 0.7;
+}
+
+/* ── 표지 ─────────────────────────────── */
+.title-screen {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  overflow: hidden;
+}
+.title-bg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0.55;
+}
+.title-bg canvas {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover;
+}
+.title-card {
+  position: relative;
+  max-width: 520px;
+  width: 100%;
+  padding: 28px 24px 24px;
+  text-align: center;
+}
+.logo {
+  font-size: clamp(3.4rem, 14vw, 5.5rem);
+  margin: 0;
+  letter-spacing: 0.15em;
+  font-weight: 900;
+  line-height: 1.1;
+}
+.subtitle {
+  margin: 4px 0 12px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: var(--ink-soft);
+}
+.lead {
+  margin: 0 0 20px;
+  line-height: 1.7;
+}
+.title-card .big {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+/* ── 게임 화면 ─────────────────────────── */
+.play,
+.collection {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 10px 16px 64px;
+}
+.topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    'back title count'
+    'prog prog prog';
+  align-items: center;
+  gap: 6px 12px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.topbar.simple {
+  grid-template-areas: 'back title count';
+}
+.topbar > button {
+  grid-area: back;
+}
+.poem-title {
+  grid-area: title;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.2rem, 3.4vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.poem-title .sep {
+  margin: 0 0.4em;
+  opacity: 0.5;
+}
+.poem-title .poet {
+  font-size: 0.8em;
+  opacity: 0.85;
+}
+.counter {
+  grid-area: count;
+  font-size: 0.95rem;
+  text-align: right;
+}
+.counter .num {
+  font-size: 1.4em;
+  font-weight: 800;
+  color: #a06a17;
+}
+.progress {
+  grid-area: prog;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+}
+.progress li {
+  height: 10px;
+  background: var(--paper-3);
+  border: 2px solid var(--frame-2);
+}
+.progress li.current {
+  background: var(--paper);
+  border-color: var(--gold);
+}
+.progress li.done {
+  background: var(--gold);
+  border-color: #6b4f1d;
+}
+
+.stage {
+  position: relative;
+  background: #1a120c;
+  padding: 4px;
+  margin: 0 auto 12px;
+  width: min(100%, calc((100vh - 360px) * 16 / 9));
+  min-width: min(100%, 520px);
+}
+.stage-canvas {
+  border-radius: 1px;
+}
+.preview-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(36, 26, 18, 0.75);
+  color: var(--paper);
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+
+.console {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.verse {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.verse-line {
+  font-size: clamp(1.5rem, 2.3vw, 2.1rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  line-height: 1.25;
+  color: #1d140d;
+  word-break: keep-all;
+}
+.verse-line span {
+  display: inline-block;
+}
+.prompt {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+.feedback {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.feedback.hintline {
+  color: var(--ink-soft);
+}
+.feedback.wrong {
+  color: var(--red);
+  animation: shake 0.35s;
+}
+.feedback.wrong b {
+  margin-right: 0.3em;
+}
+.explain {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: rise 0.35s ease-out;
+}
+.explain-text {
+  margin: 0;
+  line-height: 1.7;
+  font-size: 0.98rem;
+}
+.note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+.explain .primary {
+  align-self: flex-start;
+}
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 8px 10px;
+  background: var(--paper);
+  text-align: center;
+  transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s, opacity 0.2s;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.card-img {
+  border: 2px solid var(--frame-2);
+  background: #cdd9df;
+}
+.card-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+  word-break: keep-all;
+}
+.card-num {
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+.card.active,
+.card:hover:not(:disabled) {
+  border-color: var(--gold);
+  box-shadow:
+    inset 0 0 0 2px var(--gold-soft),
+    0 0 0 3px rgba(217, 164, 65, 0.45),
+    0 6px 0 #160f0a;
+  transform: translateY(-3px);
+  background: #f8efd7;
+}
+.card.tried {
+  opacity: 0.45;
+  filter: grayscale(0.8);
+}
+.card-x {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  color: var(--red);
+  font-weight: 900;
+}
+.card.answer {
+  border-color: var(--gold);
+  box-shadow:
+    inset 0 0 0 2px var(--gold-soft),
+    0 0 0 3px rgba(217, 164, 65, 0.6),
+    0 4px 0 #160f0a;
+  opacity: 1 !important;
+}
+.card.dim {
+  opacity: 0.4;
+}
+.card:disabled {
+  cursor: default;
+}
+
+.extra {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+.extra-head {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft);
+}
+.extra-body {
+  border: 2px solid var(--frame-2);
+  background: #1a120c;
+  min-height: 84px;
+  display: grid;
+  place-items: center;
+}
+.extra-q {
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--paper-3);
+  font-family: var(--han);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+.extra-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  min-height: 1.4em;
+}
+.got {
+  display: inline-block;
+  background: var(--red);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 1px 6px;
+  margin-right: 4px;
+  border-radius: 2px;
+  animation: pop 0.4s;
+}
+.confirm-row {
+  grid-column: 1 / -1;
+}
+.confirm {
+  width: 100%;
+  padding: 0.8em 1em;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pop {
+  0% { transform: scale(0.4); }
+  70% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+@keyframes pulse {
+  50% { opacity: 0.45; }
+}
+
+/* ── 완성 연출 ─────────────────────────── */
+.finale {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  animation: fadein 0.5s;
+}
+.finale-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  animation: zoomin 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  transform-origin: 50% 50%;
+}
+.finale-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+.finale-poem {
+  position: absolute;
+  top: 4%;
+  bottom: 4%;
+  height: fit-content;
+  margin-block: auto;
+  right: clamp(12px, 4vw, 56px);
+  writing-mode: vertical-rl;
+  padding: 22px 18px;
+  background-color: rgba(239, 228, 200, 0.9);
+  border: 3px solid var(--frame);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.4);
+  font-size: clamp(1.1rem, 2.6vh, 1.7rem);
+  line-height: 1.75;
+  max-height: 92%;
+}
+.fp-title {
+  font-weight: 900;
+  font-size: 1.25em;
+  margin-left: 0.6em;
+  letter-spacing: 0.2em;
+}
+.fp-title.long {
+  font-size: 0.95em;
+  letter-spacing: 0.05em;
+}
+.poem-title.long .han:first-child {
+  font-size: 0.8em;
+}
+.fp-poet {
+  font-size: 0.65em;
+  font-weight: 500;
+  margin-top: 0.8em;
+  display: inline-block;
+}
+.fp-line {
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  opacity: 0;
+  animation: inkin 0.9s ease-out forwards;
+}
+.seal {
+  position: absolute;
+  left: clamp(12px, 3vw, 40px);
+  top: clamp(12px, 3vw, 40px);
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  line-height: 1.15;
+  font-weight: 900;
+  color: #fff4ec;
+  background: var(--red);
+  border: 3px solid #7d1d15;
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  transform: rotate(-8deg);
+  animation: stamp 0.5s 2.2s both;
+}
+.finale-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: var(--bg-2);
+  border-top: 3px solid var(--frame);
+  animation: rise 0.5s 1.4s both;
+}
+@keyframes fadein {
+  from { opacity: 0; }
+}
+@keyframes zoomin {
+  from { transform: scale(0.55); filter: brightness(0.7); }
+  to { transform: scale(1); filter: none; }
+}
+@keyframes inkin {
+  from { opacity: 0; filter: blur(3px); }
+  to { opacity: 1; filter: none; }
+}
+@keyframes stamp {
+  from { opacity: 0; transform: scale(2.2) rotate(-8deg); }
+  to { opacity: 1; transform: scale(1) rotate(-8deg); }
+}
+
+/* ── 모달 ─────────────────────────────── */
+.modal-back {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(10, 6, 3, 0.7);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+.modal {
+  position: relative;
+  width: min(720px, 100%);
+  max-height: 88vh;
+  overflow: auto;
+  padding: 22px 22px 18px;
+  line-height: 1.7;
+}
+.modal h2 {
+  margin: 0 0 2px;
+  font-size: 1.6rem;
+}
+.modal h3 {
+  margin: 18px 0 6px;
+  font-size: 1rem;
+}
+.modal p {
+  margin: 0 0 8px;
+}
+.modal-x {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: var(--ink) !important;
+}
+.lines {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.lines td {
+  padding: 7px 6px;
+  border-bottom: 1px dashed var(--paper-3);
+  vertical-align: top;
+  font-size: 0.95rem;
+}
+.lines td.orig {
+  font-size: 1.2rem;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.08em;
+  width: 1%;
+  padding-right: 14px;
+}
+.log {
+  font-size: 0.78rem;
+  color: var(--red);
+}
+.log.ok {
+  color: var(--green);
+}
+.explains {
+  padding-left: 1.3em;
+  margin: 0;
+}
+.explains li {
+  margin-bottom: 6px;
+}
+
+/* ── 도감 ─────────────────────────────── */
+.overall {
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.bar {
+  height: 12px;
+  background: var(--paper-3);
+  border: 2px solid var(--frame);
+}
+.bar-fill {
+  height: 100%;
+  background: var(--gold);
+}
+.badges {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px 6px 6px;
+  border: 2px dashed var(--paper-3);
+  opacity: 0.55;
+  filter: grayscale(1);
+}
+.badge.on {
+  opacity: 1;
+  filter: none;
+  border: 2px solid var(--gold);
+  background: #fbf3dc;
+}
+.badge-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: var(--red);
+  color: #fff;
+  font-weight: 900;
+  border-radius: 50%;
+  border: 2px solid #7d1d15;
+}
+.badge-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.poet-group {
+  margin-bottom: 18px;
+}
+.poet-group h2 {
+  color: var(--ink);
+  font-size: 1.15rem;
+  margin: 10px 0 8px;
+}
+.poet-group h2 .muted {
+  color: var(--ink-soft);
+}
+.entries {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  text-align: center;
+  background: var(--paper);
+}
+.entry.locked {
+  background: var(--paper-2);
+  opacity: 0.7;
+}
+.thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 2px solid var(--frame-2);
+}
+.thumb.empty {
+  display: grid;
+  place-items: center;
+  background: #3e2e20;
+  color: var(--paper-3);
+  font-size: 1.6rem;
+  font-family: var(--han);
+}
+.entry-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+.entry-state {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.entry.done .entry-state {
+  color: var(--green);
+  font-weight: 700;
+}
+.detail-thumb {
+  margin: 10px 0;
+  border: 3px solid var(--frame);
+}
+.detail-poem {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  columns: 2;
+  margin: 8px 0;
+}
+.answer-log {
+  padding-left: 1.3em;
+  font-size: 0.9rem;
+}
+.answer-log .ok {
+  color: var(--green);
+}
+.tag {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.75rem;
+  padding: 0 6px;
+  background: var(--red);
+  color: #fff;
+  border-radius: 2px;
+}
+.tag.soft {
+  background: var(--frame-2);
+}
+.footnote {
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* ── 반응형 ───────────────────────────── */
+@media (max-width: 900px) {
+  .console {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .extra {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    grid-template-areas:
+      'body head'
+      'body name'
+      'btn btn';
+    text-align: left;
+    align-items: center;
+    gap: 4px 12px;
+  }
+  .extra-head { grid-area: head; }
+  .extra-body { grid-area: body; min-height: 62px; }
+  .extra-name { grid-area: name; }
+  .extra .confirm { grid-area: btn; margin-top: 6px; }
+  .extra-q { font-size: 1.8rem; }
+  .stage {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 560px) {
+  .play {
+    padding: 8px 10px 64px;
+  }
+  .choices {
+    gap: 6px;
+  }
+  .card {
+    padding: 5px 5px 8px;
+    gap: 5px;
+  }
+  .card-label {
+    font-size: 0.8rem;
+  }
+  .verse {
+    padding: 10px 12px;
+  }
+  .poem-title .sep,
+  .poem-title .poet {
+    font-size: 0.75em;
+  }
+  .detail-poem {
+    columns: 1;
+  }
+}
+@media (orientation: portrait) {
+  .finale-stage {
+    display: flex;
+    flex-direction: column;
+  }
+  .finale-canvas {
+    height: auto !important;
+    object-fit: contain;
+  }
+  .finale-poem {
+    position: static;
+    transform: none;
+    margin: 14px auto;
+    max-height: none;
+    font-size: clamp(1.05rem, 4.6vw, 1.45rem);
+  }
+  .seal {
+    width: 60px;
+    height: 60px;
+    font-size: 0.85rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+  }
+}
