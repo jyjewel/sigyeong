@@ -41,6 +41,42 @@ export function getSample(): Promise<SampleFn | null> {
   return samplePromise
 }
 
+interface PermissionsFn {
+  state: (name: string) => Promise<string>
+  manage: () => Promise<void>
+}
+
+/**
+ * AI를 못 쓰는 까닭. 화면 안내와 문제 신고용 진단 코드에 쓴다.
+ * - no-runtime: Claude 화면 밖에서 열림 (주소창에 직접 연 아티팩트 주소, 다른 사이트 등)
+ * - denied: 이 아티팩트의 Claude 사용을 거절해 둔 상태 (권한 메뉴에서 다시 켤 수 있음)
+ * - unavailable: 이 보기(계정·앱·로그인 상태)에서는 아티팩트가 Claude를 쓸 수 없음
+ */
+export type Unavailable = 'no-runtime' | 'denied' | 'unavailable'
+
+export async function whyUnavailable(): Promise<Unavailable> {
+  if (!window.claude?.use) return 'no-runtime'
+  try {
+    const perms = (await window.claude.use('permissions')) as PermissionsFn | null
+    if (perms && (await perms.state('sample')) === 'denied') return 'denied'
+  } catch {
+    // 권한 상태를 못 읽으면 일반적인 경우로 본다
+  }
+  return 'unavailable'
+}
+
+/** 플랫폼의 권한 패널을 연다. 열리지 않으면 false */
+export async function openPermissions(): Promise<boolean> {
+  try {
+    const perms = (await window.claude?.use('permissions')) as PermissionsFn | null
+    if (!perms) return false
+    await perms.manage()
+    return true
+  } catch {
+    return false
+  }
+}
+
 /** 오류 코드를 사용자 안내 문구로 */
 export function errorMessage(e: unknown): string {
   const code = (e as SampleError)?.code

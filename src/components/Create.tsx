@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { CATALOG, poetNameOf } from '../data/catalog'
 import type { Poem } from '../data/types'
 import { PixelView } from './PixelView'
-import { errorMessage, generatePoem, getSample, splitLines } from '../ai/generate'
+import { errorMessage, generatePoem, getSample, openPermissions, splitLines, whyUnavailable } from '../ai/generate'
+import type { Unavailable } from '../ai/generate'
 import type { GeneratedPoem } from '../ai/generate'
 import { deleteUserPoem, saveUserPoem } from '../ai/store'
 
@@ -21,6 +22,8 @@ type Status = { kind: 'idle' } | { kind: 'working'; chars: number; lines: number
 
 export function Create({ poems, onChange, onPlay, onBack, layersOf }: Props) {
   const [available, setAvailable] = useState<boolean | null>(null)
+  const [why, setWhy] = useState<Unavailable | null>(null)
+  const [panelFailed, setPanelFailed] = useState(false)
   const [text, setText] = useState('')
   const [title, setTitle] = useState('')
   const [poet, setPoet] = useState('')
@@ -32,7 +35,14 @@ export function Create({ poems, onChange, onPlay, onBack, layersOf }: Props) {
 
   useEffect(() => {
     let live = true
-    getSample().then((s) => live && setAvailable(!!s))
+    getSample().then(async (s) => {
+      if (!live) return
+      setAvailable(!!s)
+      if (!s) {
+        const w = await whyUnavailable()
+        if (live) setWhy(w)
+      }
+    })
     return () => {
       live = false
       ctl.current?.abort()
@@ -88,9 +98,39 @@ export function Create({ poems, onChange, onPlay, onBack, layersOf }: Props) {
           허용할지 물어봐요. 만든 작품은 이 브라우저에만 저장돼요.
         </p>
         {available === false && (
-          <p className="create-warn">
-            지금은 Claude에 연결되어 있지 않아요. 이 기능은 claude.ai에서 로그인한 상태로 이 페이지를 열었을 때만 쓸 수 있어요.
-          </p>
+          <div className="create-warn" role="alert">
+            {why === 'denied' ? (
+              <>
+                <p>
+                  {panelFailed
+                    ? '권한 창을 열 수 없어요. 화면 위쪽 아티팩트 메뉴의 권한(Permissions)에서 Claude 사용을 켠 뒤 새로고침해 주세요.'
+                    : '이 페이지의 Claude 사용을 거절해 둔 상태예요. 권한을 다시 켜면 만들 수 있어요.'}
+                </p>
+                {!panelFailed && (
+                  <button
+                    className="small"
+                    onClick={async () => {
+                      if (await openPermissions()) location.reload()
+                      else setPanelFailed(true)
+                    }}
+                  >
+                    권한 다시 켜기
+                  </button>
+                )}
+              </>
+            ) : why === 'no-runtime' ? (
+              <p>
+                지금은 Claude 화면 밖에서 열려 있어요. 받은 claude.ai/artifact/… 링크를 claude.ai에 로그인한 브라우저나 Claude
+                앱에서 열어 주세요.
+              </p>
+            ) : (
+              <p>
+                이 화면에서는 Claude에 연결할 수 없어요. claude.ai에 로그인한 뒤 이 페이지를 새로고침해 주세요. 그래도 안 되면
+                컴퓨터 브라우저(크롬·사파리)에서 claude.ai로 열어 보세요.
+              </p>
+            )}
+            <p className="small muted">진단 코드: {why ?? '확인 중'}</p>
+          </div>
         )}
         <label className="field">
           <span>원문 (한 줄에 한 구)</span>
