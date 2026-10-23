@@ -79,7 +79,7 @@ export default function App() {
             </div>
             {AI && (
               <button className="create-entry" onClick={() => setScreen({ kind: 'create' })}>
-                ✎ 내 시로 만들기 <span className="small muted">시제품</span>
+                ✎ 내 시로 만들기
               </button>
             )}
           </div>
