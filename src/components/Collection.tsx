@@ -10,10 +10,11 @@ interface Props {
   mode: 'collection' | 'select'
   onPlay: (id: string) => void
   onReplay: (id: string) => void
+  onRecall: (id: string) => void
   onBack: () => void
 }
 
-export function Collection({ save, mode, onPlay, onReplay, onBack }: Props) {
+export function Collection({ save, mode, onPlay, onReplay, onRecall, onBack }: Props) {
   const [detail, setDetail] = useState<CatalogEntry | null>(null)
   const [info, setInfo] = useState(false)
   const progress = poetProgress(save)
@@ -76,7 +77,7 @@ export function Collection({ save, mode, onPlay, onReplay, onBack }: Props) {
                   )}
                   <div className="entry-title han">{e.title}</div>
                   <div className="entry-state">
-                    {!e.playable ? '준비 중' : rec ? (rec.everPerfect ? '완료 · 완벽 독해' : '완료') : '미완료'}
+                    {!e.playable ? '준비 중' : rec ? `완료${rec.everPerfect ? ' · 완벽 독해' : ''}${rec.recited ? ' · 誦' : ''}` : '미완료'}
                   </div>
                 </button>
               )
@@ -103,6 +104,11 @@ export function Collection({ save, mode, onPlay, onReplay, onBack }: Props) {
                   <p className="small muted">
                     {poem.era} · {poem.form} · {rec ? `${new Date(rec.completedAt).toLocaleDateString('ko-KR')} 완료 · ${rec.plays}회` : ''}
                     {rec?.everPerfect && <span className="tag">완벽 독해</span>}
+                    {rec?.recited ? (
+                      <span className="tag">誦 암송</span>
+                    ) : (
+                      !!rec?.recallRound && <span className="tag soft">외워 보기 {rec.recallRound}단계</span>
+                    )}
                     {rec?.saved && <span className="tag soft">도감 저장</span>}
                   </p>
                   {rec?.thumbnail && <img src={rec.thumbnail} alt="완성한 풍경" className="pixel detail-thumb" />}
@@ -133,6 +139,7 @@ export function Collection({ save, mode, onPlay, onReplay, onBack }: Props) {
                       완성 애니메이션 다시 보기
                     </button>
                     <button onClick={() => setInfo(true)}>원문과 해설</button>
+                    <button onClick={() => onRecall(detail.id)}>외워 보기</button>
                     <button onClick={() => onPlay(detail.id)}>다시 도전</button>
                   </div>
                 </>

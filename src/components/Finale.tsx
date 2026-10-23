@@ -17,6 +17,8 @@ interface Props {
   onSave?: () => void
   onNext?: () => void
   onClose?: () => void
+  /** 외워 보기 시작 */
+  onRecall?: () => void
 }
 
 export function Finale(props: Props) {
@@ -54,6 +56,7 @@ export function Finale(props: Props) {
       <div className="finale-bar">
         <button onClick={() => setRun((r) => r + 1)}>다시 감상</button>
         <button onClick={() => setInfo(true)}>원문과 해설</button>
+        {props.onRecall && <button onClick={props.onRecall}>외워 보기</button>}
         {props.mode === 'complete' ? (
           <>
             <button onClick={props.onSave} disabled={props.saved}>

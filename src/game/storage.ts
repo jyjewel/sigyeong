@@ -18,6 +18,10 @@ export interface PoemRecord {
   answers: AnswerLog[]
   thumbnail?: string
   saved: boolean
+  /** 외워 보기에서 마친 가장 높은 단계 (0~3) */
+  recallRound?: number
+  /** 마지막 단계를 한 번도 틀리지 않고 마쳤는지 (誦 도장) */
+  recited?: boolean
 }
 
 export interface SaveData {
@@ -72,6 +76,18 @@ export function recordCompletion(
     saved: prev?.saved ?? false,
   }
   return { ...d, records: { ...d.records, [poemId]: rec } }
+}
+
+/** 외워 보기 한 단계를 마쳤을 때. 풍경을 완성한 작품만 기록한다 */
+export function recordRecall(d: SaveData, poemId: string, round: number, perfect: boolean, lastRound: number): SaveData {
+  const rec = d.records[poemId]
+  if (!rec) return d
+  const next: PoemRecord = {
+    ...rec,
+    recallRound: Math.max(rec.recallRound ?? 0, round),
+    recited: rec.recited || (round === lastRound && perfect),
+  }
+  return { ...d, records: { ...d.records, [poemId]: next } }
 }
 
 export function markSaved(d: SaveData, poemId: string): SaveData {

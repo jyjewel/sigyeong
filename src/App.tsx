@@ -6,9 +6,11 @@ import { Finale } from './components/Finale'
 import { Collection } from './components/Collection'
 import { PixelView } from './components/PixelView'
 import { SpriteSheet } from './components/SpriteSheet'
-import { loadSave, markSaved, recordCompletion, writeSave } from './game/storage'
+import { loadSave, markSaved, recordCompletion, recordRecall, writeSave } from './game/storage'
 import type { AnswerLog, SaveData } from './game/storage'
 import { setMuted } from './game/sound'
+import { Recall } from './components/Recall'
+import { RECALL_ROUNDS } from './game/recall'
 
 type Screen =
   | { kind: 'title' }
@@ -18,6 +20,7 @@ type Screen =
   | { kind: 'collection' }
   | { kind: 'select' }
   | { kind: 'sprites' }
+  | { kind: 'recall'; poemId: string; run: number }
 
 /** 완성 상태의 레이어 (도감에서 다시 보기용) */
 function fullLayers(poem: Poem) {
@@ -99,6 +102,7 @@ export default function App() {
           perfect={screen.perfect}
           answers={screen.answers}
           mode="complete"
+          onRecall={() => setScreen({ kind: 'recall', poemId: poem.id, run: Date.now() })}
           saved={!!save.records[poem.id]?.saved}
           onSave={() => setSave((s) => markSaved(s, poem.id))}
           onNext={() => {
@@ -125,6 +129,7 @@ export default function App() {
           perfect={rec?.everPerfect}
           answers={rec?.answers}
           mode="replay"
+          onRecall={() => setScreen({ kind: 'recall', poemId: poem.id, run: Date.now() })}
           onClose={() => setScreen({ kind: 'collection' })}
         />
       )
@@ -138,10 +143,23 @@ export default function App() {
           mode={screen.kind}
           onPlay={start}
           onReplay={(id) => setScreen({ kind: 'replay', poemId: id })}
+          onRecall={(id) => setScreen({ kind: 'recall', poemId: id, run: Date.now() })}
           onBack={() => setScreen({ kind: 'title' })}
         />
       )
       break
+    case 'recall': {
+      const poem = getPoem(screen.poemId)!
+      body = (
+        <Recall
+          key={screen.run}
+          poem={poem}
+          onRound={(round, perfect) => setSave((s) => recordRecall(s, poem.id, round, perfect, RECALL_ROUNDS))}
+          onExit={() => setScreen({ kind: 'collection' })}
+        />
+      )
+      break
+    }
     case 'sprites':
       body = <SpriteSheet onBack={() => setScreen({ kind: 'title' })} />
       break

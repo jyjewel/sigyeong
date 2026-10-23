@@ -887,3 +887,83 @@ img.pixel {
     animation-delay: 0s !important;
   }
 }
+
+/* ── 외워 보기 ─────────────────────────── */
+.recall-line .slot {
+  display: inline-block;
+  min-width: 1em;
+  border-bottom: 3px solid var(--frame-2);
+  color: var(--red);
+}
+.recall-line .slot.now {
+  border-bottom-color: var(--gold);
+  background: rgba(217, 164, 65, 0.22);
+  animation: pulse 1.2s infinite;
+}
+.recall-line .slot.filled {
+  border-bottom-color: var(--green);
+  color: var(--green);
+  animation: pop 0.3s;
+}
+.glyphs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.glyph {
+  position: relative;
+  min-height: 5.5rem;
+  font-size: 2.6rem;
+  font-weight: 900;
+  background: var(--paper);
+}
+.glyph .card-num {
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  font-size: 0.8rem;
+  font-family: var(--kr);
+  font-weight: 600;
+}
+.glyph:hover:not(:disabled) {
+  background: var(--gold-soft);
+}
+.glyph.tried {
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+.glyph.answer {
+  background: var(--gold-soft);
+  border-color: var(--green);
+}
+.recall-done {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.recall-result {
+  margin: 0;
+  font-weight: 700;
+}
+.recall-poem {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1.7;
+  columns: 2;
+}
+@media (max-width: 640px) {
+  .glyph {
+    min-height: 4.5rem;
+    font-size: 2.2rem;
+  }
+  .recall-poem {
+    columns: 1;
+  }
+}
+.console.single {
+  grid-template-columns: minmax(0, 1fr);
+}
+.recall .seal {
+  animation-delay: 0.3s;
+}
