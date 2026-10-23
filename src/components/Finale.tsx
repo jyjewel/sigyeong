@@ -45,10 +45,8 @@ export function Finale(props: Props) {
           ))}
         </div>
         {props.perfect && (
-          <div className="seal" title="첫 시도에 모든 구절을 맞혔습니다">
-            완벽
-            <br />
-            독해
+          <div className="seal han" title="첫 시도에 모든 구절을 맞혔습니다">
+            完
           </div>
         )}
       </div>
