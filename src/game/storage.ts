@@ -10,9 +10,9 @@ export interface AnswerLog {
 export interface PoemRecord {
   poemId: string
   completedAt: string
-  /** 가장 최근 플레이의 완벽 독해 여부 */
+  /** 가장 최근 플레이에서 네 구를 한 번에 맞혔는지 (完) */
   perfect: boolean
-  /** 한 번이라도 완벽 독해를 했는지 */
+  /** 한 번이라도 完을 받았는지 */
   everPerfect: boolean
   plays: number
   answers: AnswerLog[]
