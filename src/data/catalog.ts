@@ -10,6 +10,7 @@ import { chunxiao, fengqiao, guanque, jiangxue, xiajiangling } from './poems/bat
 import { chuzhou, jiandejiang, qinhuai, wuyixiang, zhuliguan } from './poems/batch2b'
 import { HUAYI_BATCH1 } from './poems/huayi8a'
 import { HUAYI_BATCH2 } from './poems/huayi8b'
+import { HUAYI_BATCH3 } from './poems/huayi8c'
 
 // 시인 목록과 배지
 export const POETS: Poet[] = [
@@ -104,6 +105,36 @@ export const POETS: Poet[] = [
     era: '唐',
     badge: { id: 'liuchangqing-snow', name: '유장경의 눈 오는 밤', description: '수록된 유장경의 작품을 모두 완성했습니다.' },
   },
+  {
+    id: 'censhen',
+    name: '岑參',
+    era: '唐',
+    badge: { id: 'censhen-tower', name: '잠삼의 높은 집', description: '수록된 잠삼의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'huangfuzeng',
+    name: '皇甫曾',
+    era: '唐',
+    badge: { id: 'huangfuzeng-spring', name: '황보증의 산 아래 샘', description: '수록된 황보증의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'qianqi',
+    name: '錢起',
+    era: '唐',
+    badge: { id: 'qianqi-river', name: '전기의 강길', description: '수록된 전기의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'hanhong',
+    name: '韓翃',
+    era: '唐',
+    badge: { id: 'hanhong-apricot', name: '한굉의 살구꽃', description: '수록된 한굉의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'huangfuran',
+    name: '皇甫冉',
+    era: '唐',
+    badge: { id: 'huangfuran-pink', name: '황보염의 패랭이꽃', description: '수록된 황보염의 작품을 모두 완성했습니다.' },
+  },
 ]
 
 // 도감 목록. 새 작품은 poem 객체를 만들어 playable: true 로 등록한다.
@@ -127,7 +158,7 @@ export const CATALOG: CatalogEntry[] = [
   { id: 'wuyixiang', title: '烏衣巷', poetId: 'liuyuxi', playable: true, poem: wuyixiang, tags: ['七言絶句', '저녁', '회고'] },
   { id: 'boqinhuai', title: '泊秦淮', poetId: 'dumu', playable: true, poem: qinhuai, tags: ['七言絶句', '밤', '회고'] },
   // 申緯 『唐詩畫意』 (차례는 src/data/huayi.ts)
-  ...[...HUAYI_BATCH1, ...HUAYI_BATCH2].map((poem): CatalogEntry => ({ id: poem.id, title: poem.title, poetId: poem.poetId, playable: true, poem, source: 'huayi' })),
+  ...[...HUAYI_BATCH1, ...HUAYI_BATCH2, ...HUAYI_BATCH3].map((poem): CatalogEntry => ({ id: poem.id, title: poem.title, poetId: poem.poetId, playable: true, poem, source: 'huayi' })),
 ]
 
 export function getEntry(id: string): CatalogEntry | undefined {

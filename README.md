@@ -34,6 +34,7 @@ npm run preview      # 빌드 결과 미리보기
 - `src/data/huayi.ts` 申緯의 차례. 아직 만들지 않은 작품은 '준비 중'으로 보인다
 - `src/data/poems/huayi8a.ts` 卷八 첫 묶음 15수 (盧照鄰, 王維 輞川集 등, 裴迪 輞川集)
 - `src/data/poems/huayi8b.ts` 卷八 둘째 묶음 14수 (儲光羲, 王昌齡, 劉長卿, 孟浩然, 李白)
+- `src/data/poems/huayi8c.ts` 卷八 셋째 묶음 21수 (韋應物, 岑參, 皇甫曾, 杜甫, 錢起 江行無題 등, 韓翃, 皇甫冉)
 - `src/render/poems/hy_*.ts` 그림. `hy_kit.ts`는 물가 부품(물·부들·연꽃·백로·작은 배 등)
 - 王維와 裴迪이 같은 곳을 읊은 작품은 배경을 함께 쓴다 (鹿柴, 北垞)
 
