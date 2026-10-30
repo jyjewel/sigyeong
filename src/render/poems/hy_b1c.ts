@@ -666,7 +666,8 @@ const PT_BOAT = { x: 160, y: 108, w: 160, h: 72 }
 
 /** 집이 앉을 호숫가 땅 */
 function ptLand(ctx: Ctx) {
-  ridge(ctx, (x) => (x > 180 ? H : 132 - 10 * Math.sin((x / 180) * Math.PI)), '#6e7e56', '#86966a')
+  // 언덕은 오른쪽에서 비스듬히 물가로 내려간다 (깎아지른 절벽처럼 끊기지 않게)
+  ridge(ctx, (x) => (x < 150 ? 132 - 10 * Math.sin((x / 180) * Math.PI) : Math.min(H, 127 + (x - 150) ** 1.35 * 0.5)), '#6e7e56', '#86966a')
 }
 
 export const PEI_BEITUO_SPRITES = [
@@ -728,13 +729,17 @@ export const PEI_BEITUO_SPRITES = [
   }),
   sp('pt_horse', '말 타고 큰길로', 26, PT_BOAT, (ctx, env) => {
     const x = 200 + mod(env.t * 8, 90)
-    px(ctx, 180, 150, 140, 4, '#a8987a')
+    // 큰길이 놓인 물가 둑
+    ridge(ctx, (x) => (x < 168 ? H : 147 + 2 * Math.sin(x * 0.05)), '#6e7e56', '#86966a', 160, W)
+    px(ctx, 170, 152, 150, 4, '#a8987a')
     px(ctx, x, 138, 16, 6, '#6b4a32')
     px(ctx, x + 14, 134, 3, 6, '#6b4a32')
     for (let j = 0; j < 4; j++) px(ctx, x + 1 + j * 4, 144, 1, 6, '#4a3220')
     person(ctx, x + 5, 129, POET_PAL.R)
   }),
   sp('pt_bridge', '걸어서 다리를 건넘', 26, PT_BOAT, (ctx, env) => {
+    // 다리 건너편 기슭
+    ridge(ctx, (x) => (x < 298 ? H : 150 - (x - 298) * 0.3), '#6e7e56', '#86966a', 290, W)
     for (let x = 180; x < 310; x++) px(ctx, x, 150 - Math.sin(((x - 180) / 130) * Math.PI) * 12, 1, 4, '#a8a08c')
     const f = mod(env.t * 0.08, 1)
     const x = 186 + f * 110

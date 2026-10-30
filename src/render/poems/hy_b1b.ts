@@ -320,7 +320,12 @@ const BT_EDGE = { x: 170, y: 40, w: 128, h: 72 }
 
 /** 북타 기슭 (1구 정답이 그린다) */
 function shoreLand(ctx: Ctx) {
-  ridge(ctx, (x) => (x > 170 ? H : 128 - 14 * Math.sin((x / 170) * Math.PI) + 3 * Math.sin(x * 0.1)), '#6e7e56', '#86966a')
+  ridge(
+    ctx,
+    (x) => (x < 145 ? 128 - 14 * Math.sin((x / 170) * Math.PI) + 3 * Math.sin(x * 0.1) : Math.min(H, 123 + (x - 145) ** 1.35 * 0.5)),
+    '#6e7e56',
+    '#86966a',
+  )
   for (let i = 0; i < 6; i++) broadTree(ctx, 20 + i * 22, 122 - Math.sin(((20 + i * 22) / 170) * Math.PI) * 10, 0.9, GREEN)
 }
 
