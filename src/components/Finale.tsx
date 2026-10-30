@@ -66,12 +66,12 @@ export function Finale(props: Props) {
         )}
       </div>
 
-      {info && <PoemInfo poem={poem} answers={props.answers} onClose={() => setInfo(false)} />}
+      {info && <PoemInfo poem={poem} onClose={() => setInfo(false)} />}
     </div>
   )
 }
 
-export function PoemInfo({ poem, answers, onClose }: { poem: Poem; answers?: AnswerLog[]; onClose: () => void }) {
+export function PoemInfo({ poem, onClose }: { poem: Poem; onClose: () => void }) {
   const poet = getPoet(poem.poetId)
   return (
     <div className="modal-back" onClick={onClose}>
@@ -89,7 +89,6 @@ export function PoemInfo({ poem, answers, onClose }: { poem: Poem; answers?: Ans
         <table className="lines">
           <tbody>
             {poem.lines.map((l, i) => {
-              const a = answers?.[i]
               return (
                 <tr key={i}>
                   <td className="han orig" lang="zh-Hant">
@@ -97,11 +96,6 @@ export function PoemInfo({ poem, answers, onClose }: { poem: Poem; answers?: Ans
                   </td>
                   <td>
                     {poem.translation[i]}
-                    {a && a.picks.length > 0 && (
-                      <div className={`log ${a.picks.length === 1 ? 'ok' : ''}`}>
-                        {a.picks.length === 1 ? '한 번에 맞힘' : `시도: ${a.picks.join(' → ')}`}
-                      </div>
-                    )}
                   </td>
                 </tr>
               )

@@ -100,8 +100,13 @@ export default function App() {
             </ol>
             <p className="about-source">
               작품 출처 · <span className="han">紫霞 申緯</span>(1769–1847)가 엮은 『<span className="han">唐詩畫意</span>』의 五言·六言 절구
-              <button className="link-more" onClick={() => setBookOpen((o) => !o)} aria-expanded={bookOpen}>
-                {bookOpen ? '접기 ▴' : '더보기 ▾'}
+              <button
+                className="link-more"
+                onClick={() => setBookOpen((o) => !o)}
+                aria-expanded={bookOpen}
+                aria-label={bookOpen ? '『唐詩畫意』 설명 접기' : '『唐詩畫意』 설명 펼치기'}
+              >
+                {bookOpen ? '▲' : '▼'}
               </button>
             </p>
             {bookOpen && (

@@ -126,23 +126,6 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
                       <div key={i}>{l}</div>
                     ))}
                   </div>
-                  {rec && (
-                    <>
-                      <h3>정답 기록 (최근 플레이)</h3>
-                      <ol className="answer-log">
-                        {rec.answers.map((a, i) => (
-                          <li key={i}>
-                            <span className="han">{a.line}</span> —{' '}
-                            {a.picks.length <= 1 ? (
-                              <span className="ok">{a.picks[0]} (한 번에)</span>
-                            ) : (
-                              <span>{a.picks.join(' → ')}</span>
-                            )}
-                          </li>
-                        ))}
-                      </ol>
-                    </>
-                  )}
                   <div className="row">
                     <button className="primary" onClick={() => onReplay(detail.id)}>
                       완성 애니메이션 다시 보기
@@ -158,7 +141,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         </div>
       )}
       {info && detail?.poem && (
-        <PoemInfo poem={detail.poem} answers={save.records[detail.id]?.answers} onClose={() => setInfo(false)} />
+        <PoemInfo poem={detail.poem} onClose={() => setInfo(false)} />
       )}
     </div>
   )

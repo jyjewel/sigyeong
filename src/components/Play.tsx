@@ -211,7 +211,7 @@ export function Play({ poem, onFinish, onExit }: Props) {
                   pointerType.current = 'keyboard'
                 }}
                 onClick={() => {
-                  // 마우스·키보드: 클릭 즉시 판정 / 터치·펜: 미리보기만 하고 '선택 확정'으로 판정
+                  // 마우스·키보드: 클릭 즉시 판정 / 터치·펜: 미리보기만 하고 '✓ 이 그림으로'로 판정
                   if (pointerType.current === 'touch' || pointerType.current === 'pen') {
                     setSelected(i)
                     sfx.hover()
@@ -238,7 +238,7 @@ export function Play({ poem, onFinish, onExit }: Props) {
         {touchMode && phase === 'ask' && (
           <div className="confirm-row">
             <button className="primary confirm" disabled={selected === null} onClick={() => selected !== null && judge(selected)}>
-              선택 확정
+              ✓ 이 그림으로
             </button>
           </div>
         )}
