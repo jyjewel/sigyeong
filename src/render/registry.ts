@@ -40,6 +40,14 @@ import {
   CUINIAO_SPRITES, DONGKOU_SPRITES, HANGONG_SPRITES, JIANGXING5_SPRITES, JIANGXING6_SPRITES, SHIZHU_SPRITES, TIANHE_SPRITES,
   cuiniaoBackground, dongkouBackground, hangongBackground, jiangxing5Background, jiangxing6Background, shizhuBackground, tianheBackground,
 } from './poems/hy_b3c'
+import {
+  BAIXINYUE_SPRITES, JIANGXING_LIU_SPRITES, SHANZHONG_GU_SPRITES, SHIDOU_SPRITES, XISHANG_SPRITES,
+  baixinyueBackground, jiangxingLiuBackground, shanzhongGuBackground, shidouBackground, xishangBackground,
+} from './poems/hy_b4a'
+import {
+  BEISHAN_SPRITES, QIUTAN_SPRITES, SAIXIA_SPRITES, SONGCHEN_SPRITES, TINGZHENG_SPRITES,
+  beishanBackground, qiutanBackground, saixiaBackground, songchenBackground, tingzhengBackground,
+} from './poems/hy_b4b'
 
 import { titleBackground } from './backgrounds/title'
 
@@ -68,7 +76,9 @@ for (const bg of [
   bailuBackground, xiariBackground, baiyingBackground, qushiBackground, langyaBackground, changmenBackground, qiuzhaiBackground,
   tongyeBackground, gaojuBackground, zaozitaiBackground, shanquanBackground, zaojingBackground, shuijianBackground,
   jiangxing1Background, jiangxing2Background, jiangxing3Background, jiangxing4Background, jiangxing5Background, jiangxing6Background,
-  dongkouBackground, cuiniaoBackground, tianheBackground, hangongBackground, shizhuBackground,
+  dongkouBackground, cuiniaoBackground, tianheBackground, hangongBackground, shizhuBackground, jiangxingLiuBackground,
+  shidouBackground, shanzhongGuBackground, xishangBackground, baixinyueBackground, beishanBackground, saixiaBackground,
+  qiutanBackground, songchenBackground, tingzhengBackground,
 ])
   registerBackground(bg)
 for (const list of [
@@ -82,7 +92,8 @@ for (const list of [
   BAILU_SPRITES, XIARI_SPRITES, BAIYING_SPRITES, QUSHI_SPRITES, LANGYA_SPRITES, CHANGMEN_SPRITES, QIUZHAI_SPRITES, TONGYE_SPRITES,
   GAOJU_SPRITES, ZAOZITAI_SPRITES, SHANQUAN_SPRITES, ZAOJING_SPRITES, SHUIJIAN_SPRITES, JIANGXING1_SPRITES, JIANGXING2_SPRITES,
   JIANGXING3_SPRITES, JIANGXING4_SPRITES, JIANGXING5_SPRITES, JIANGXING6_SPRITES, DONGKOU_SPRITES, CUINIAO_SPRITES, TIANHE_SPRITES,
-  HANGONG_SPRITES, SHIZHU_SPRITES,
+  HANGONG_SPRITES, SHIZHU_SPRITES, JIANGXING_LIU_SPRITES, SHIDOU_SPRITES, SHANZHONG_GU_SPRITES, XISHANG_SPRITES, BAIXINYUE_SPRITES,
+  BEISHAN_SPRITES, SAIXIA_SPRITES, QIUTAN_SPRITES, SONGCHEN_SPRITES, TINGZHENG_SPRITES,
 ])
   registerSprites(list)
 
