@@ -42,7 +42,7 @@ export function Certificate(props: Props) {
           <h2 className="cert-title han">賞 狀</h2>
           <label className="cert-name">
             <span className="muted small">이름</span>
-            <input value={name} onChange={(e) => changeName(e.target.value)} placeholder="이름을 적어 주세요" maxLength={20} />
+            <input value={name} onChange={(e) => changeName(e.target.value)} placeholder="이름 쓰기" maxLength={20} />
           </label>
           <p className="cert-body">
             위 사람은 <span className="han">紫霞 申緯</span>의 『<span className="han">唐詩畫意</span>』에 실린 五言·六言 절구{' '}

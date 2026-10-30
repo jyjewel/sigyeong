@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { CATALOG, getEntry, getPoet } from '../data/catalog'
+import { getEntry, getPoet } from '../data/catalog'
 import { HUAYI } from '../data/huayi'
+import { APPENDIX } from '../data/collection'
 import type { CatalogEntry } from '../data/types'
 import { huayiProgress } from '../game/storage'
 import type { SaveData } from '../game/storage'
 import { PoemInfo } from './Finale'
-import { Certificate } from './Certificate'
 
 interface Props {
   save: SaveData
@@ -15,21 +15,12 @@ interface Props {
   onBack: () => void
 }
 
-/** 『唐詩畫意』 차례에 없는 『唐詩三百首』 작품 (부록) */
-const IN_HUAYI = new Set(HUAYI.flatMap((s) => s.items.map((i) => i.id)))
-const APPENDIX = CATALOG.filter((e) => (e.source ?? 'sanbai') === 'sanbai' && !IN_HUAYI.has(e.id))
 
 export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) {
   const [detail, setDetail] = useState<CatalogEntry | null>(null)
   const [info, setInfo] = useState(false)
-  const [cert, setCert] = useState(false)
   const huayi = huayiProgress(save)
   const appendixDone = APPENDIX.filter((e) => save.records[e.id]).length
-  const allIds = [...IN_HUAYI, ...APPENDIX.map((e) => e.id)]
-  const allTotal = huayi.total + APPENDIX.length
-  const allDone = huayi.done + appendixDone
-  const complete = allDone === allTotal
-  const recs = allIds.map((id) => save.records[id]).filter((r) => !!r)
 
   const card = (e: CatalogEntry, sub?: string) => {
     const rec = save.records[e.id]
@@ -68,12 +59,6 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         </div>
       </header>
 
-      {complete && (
-        <button className="cert-banner frame" onClick={() => setCert(true)}>
-          <span className="han">賞狀</span> 모두 완성! 상장 보기 ▶
-        </button>
-      )}
-
       {HUAYI.map((sec) => {
         const ready = sec.items.filter((i) => getEntry(i.id)?.playable).length
         return (
@@ -110,33 +95,6 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         </section>
       )}
 
-      <section className={`cert-slot frame ${complete ? 'open' : ''}`}>
-        <div className="cert-slot-mark han">賞</div>
-        <div>
-          <div className="cert-slot-title">상장</div>
-          <div className="small muted">
-            {complete
-              ? '『唐詩畫意』와 부록을 모두 완성했습니다.'
-              : `『唐詩畫意』 ${huayi.total}수와 부록 ${APPENDIX.length}수를 모두 완성하면 상장을 드립니다 · ${allDone} / ${allTotal}`}
-          </div>
-        </div>
-        {complete && (
-          <button className="primary" onClick={() => setCert(true)}>
-            상장 보기
-          </button>
-        )}
-      </section>
-
-      {cert && (
-        <Certificate
-          huayiTotal={huayi.total}
-          appendixTotal={APPENDIX.length}
-          perfectCount={recs.filter((r) => r.everPerfect).length}
-          recitedCount={recs.filter((r) => r.recited).length}
-          date={new Date(Math.max(...recs.map((r) => Date.parse(r.completedAt))))}
-          onClose={() => setCert(false)}
-        />
-      )}
 
       {detail && detail.poem && (
         <div className="modal-back" onClick={() => setDetail(null)}>

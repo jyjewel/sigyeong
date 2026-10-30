@@ -11,6 +11,8 @@ import type { AnswerLog, SaveData } from './game/storage'
 import { setMuted } from './game/sound'
 import { Recall } from './components/Recall'
 import { RECALL_ROUNDS } from './game/recall'
+import { Certificate } from './components/Certificate'
+import { ALL_IDS, APPENDIX } from './data/collection'
 
 type Screen =
   | { kind: 'title' }
@@ -49,6 +51,8 @@ export default function App() {
   }, [])
 
   const [bookOpen, setBookOpen] = useState(false)
+  /** 마지막 남은 시를 완성한 순간에만 뜨는 상장 */
+  const [cert, setCert] = useState(false)
   useEffect(() => {
     try {
       window.scrollTo(0, 0)
@@ -133,7 +137,11 @@ export default function App() {
           poem={poem}
           onExit={() => setScreen({ kind: 'collection' })}
           onFinish={(r) => {
-            setSave((s) => recordCompletion(s, poem.id, r.perfect, r.answers, r.thumbnail))
+            const wasComplete = ALL_IDS.every((id) => save.records[id])
+            const next = recordCompletion(save, poem.id, r.perfect, r.answers, r.thumbnail)
+            setSave(next)
+            // 완성 풍경이 펼쳐진 뒤에 상장이 떠오른다
+            if (!wasComplete && ALL_IDS.every((id) => next.records[id])) setTimeout(() => setCert(true), 4500)
             setScreen({ kind: 'finale', poemId: poem.id, placed: r.placed, perfect: r.perfect, answers: r.answers })
           }}
         />
@@ -217,6 +225,16 @@ export default function App() {
       <button className="mute ghost small" onClick={toggleMute} aria-label={save.muted ? '소리 켜기' : '소리 끄기'}>
         {save.muted ? '소리 꺼짐' : '소리 켜짐'}
       </button>
+      )}
+      {cert && screen.kind === 'finale' && (
+        <Certificate
+          huayiTotal={ALL_IDS.length - APPENDIX.length}
+          appendixTotal={APPENDIX.length}
+          perfectCount={ALL_IDS.filter((id) => save.records[id]?.everPerfect).length}
+          recitedCount={ALL_IDS.filter((id) => save.records[id]?.recited).length}
+          date={new Date()}
+          onClose={() => setCert(false)}
+        />
       )}
       {CATALOG.length === 0 && <p>작품 데이터가 없습니다.</p>}
     </div>
