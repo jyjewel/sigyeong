@@ -150,7 +150,7 @@ img.pixel {
   overflow: hidden;
 }
 .title-bg {
-  position: fixed;
+  position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
@@ -1199,4 +1199,12 @@ img.pixel {
   .cert-actions {
     display: none;
   }
+}
+
+.error-text {
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-size: 0.75rem;
+  background: var(--paper-2);
+  padding: 8px;
 }

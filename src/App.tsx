@@ -49,7 +49,13 @@ export default function App() {
   }, [])
 
   const [bookOpen, setBookOpen] = useState(false)
-  useEffect(() => window.scrollTo(0, 0), [screen.kind])
+  useEffect(() => {
+    try {
+      window.scrollTo(0, 0)
+    } catch {
+      /* 스크롤을 옮길 수 없어도 화면은 그대로 */
+    }
+  }, [screen.kind])
   const toggleMute = () => setSave((s) => ({ ...s, muted: !s.muted }))
 
   let body: React.ReactNode = null
