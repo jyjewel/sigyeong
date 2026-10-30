@@ -41,6 +41,8 @@ import {
   cuiniaoBackground, dongkouBackground, hangongBackground, jiangxing5Background, jiangxing6Background, shizhuBackground, tianheBackground,
 } from './poems/hy_b3c'
 
+import { titleBackground } from './backgrounds/title'
+
 const BACKGROUNDS = new Map<string, Background>()
 const SPRITES = new Map<string, Sprite>()
 
@@ -52,6 +54,7 @@ export function registerSprites(list: Sprite[]) {
 }
 
 registerBackground(denggaoBackground)
+registerBackground(titleBackground)
 registerSprites(DENGGAO_SPRITES)
 for (const bg of [
   chunwangBackground, lvyeBackground, jingyesiBackground, huanghelouBackground, luzhaiBackground, shanjuBackground,

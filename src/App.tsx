@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { CATALOG, FIRST_POEM_ID, getPoem } from './data/catalog'
+import { CATALOG, getPoem } from './data/catalog'
 import type { Poem } from './data/types'
 import { Play, layersFor, sceneFor } from './components/Play'
 import { Finale } from './components/Finale'
@@ -18,7 +18,6 @@ type Screen =
   | { kind: 'finale'; poemId: string; placed: string[]; perfect: boolean; answers: AnswerLog[] }
   | { kind: 'replay'; poemId: string }
   | { kind: 'collection' }
-  | { kind: 'select' }
   | { kind: 'sprites' }
   | { kind: 'recall'; poemId: string; run: number }
 
@@ -49,40 +48,33 @@ export default function App() {
   }, [])
 
   const toggleMute = () => setSave((s) => ({ ...s, muted: !s.muted }))
-  const firstPoem = getPoem(FIRST_POEM_ID)!
-  const firstLayers = fullLayers(firstPoem)
 
   let body: React.ReactNode = null
   switch (screen.kind) {
-    case 'title': {
-      const rec = save.records[FIRST_POEM_ID]
+    case 'title':
       body = (
         <div className="title-screen">
           <div className="title-bg">
-            <PixelView background={firstLayers.background} placed={rec ? firstLayers.placed : []} label="표지 풍경" fps={30} />
+            <PixelView background="title-spring" placed={[]} label="표지 풍경" fps={30} />
           </div>
           <div className="title-card frame paper">
             <h1 className="logo han">詩景</h1>
             <p className="subtitle">한시로 그리는 풍경</p>
-            <button className="primary big" onClick={() => start(FIRST_POEM_ID)} autoFocus>
+            <p className="title-book han">紫霞 申緯 『唐詩畫意』</p>
+            <button className="primary big" onClick={() => setScreen({ kind: 'collection' })} autoFocus>
               시작하기 ▶
             </button>
-            <div className="row center">
-              <button onClick={() => setScreen({ kind: 'select' })}>작품 선택</button>
-              <button onClick={() => setScreen({ kind: 'collection' })}>도감</button>
-            </div>
           </div>
         </div>
       )
       break
-    }
     case 'play': {
       const poem = getPoem(screen.poemId)!
       body = (
         <Play
           key={screen.run}
           poem={poem}
-          onExit={() => setScreen({ kind: 'title' })}
+          onExit={() => setScreen({ kind: 'collection' })}
           onFinish={(r) => {
             setSave((s) => recordCompletion(s, poem.id, r.perfect, r.answers, r.thumbnail))
             setScreen({ kind: 'finale', poemId: poem.id, placed: r.placed, perfect: r.perfect, answers: r.answers })
@@ -111,7 +103,7 @@ export default function App() {
             const rest = [...playable.slice(idx + 1), ...playable.slice(0, idx)]
             const next = rest.find((e) => !save.records[e.id]) ?? rest[0]
             if (next) start(next.id)
-            else setScreen({ kind: 'select' })
+            else setScreen({ kind: 'collection' })
           }}
         />
       )
@@ -136,11 +128,9 @@ export default function App() {
       break
     }
     case 'collection':
-    case 'select':
       body = (
         <Collection
           save={save}
-          mode={screen.kind}
           onPlay={start}
           onReplay={(id) => setScreen({ kind: 'replay', poemId: id })}
           onRecall={(id) => setScreen({ kind: 'recall', poemId: id, run: Date.now() })}

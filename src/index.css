@@ -154,7 +154,7 @@ img.pixel {
   inset: 0;
   display: grid;
   place-items: center;
-  opacity: 0.55;
+  opacity: 0.92;
 }
 .title-bg canvas {
   width: 100vw !important;
@@ -185,9 +185,25 @@ img.pixel {
   margin: 0 0 20px;
   line-height: 1.7;
 }
+.title-book {
+  margin: 0 0 18px;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+}
+.title-card {
+  background: rgba(251, 246, 236, 0.9);
+}
 .title-card .big {
   width: 100%;
   margin-bottom: 14px;
+}
+
+@media (max-aspect-ratio: 3/4) {
+  .title-screen {
+    place-items: end center;
+    padding-bottom: 14vh;
+  }
 }
 
 /* ── 게임 화면 ─────────────────────────── */
@@ -968,16 +984,15 @@ img.pixel {
   animation-delay: 0.3s;
 }
 
-/* ── 도감: 선집 고르기 ─────────────────── */
-.books {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 4px 0 12px;
+/* ── 작품 목록: 책 소개와 부록 ─────────── */
+.book-intro p {
+  line-height: 1.75;
+  margin: 10px 0 0;
 }
-.books button .han {
-  font-weight: 900;
-  letter-spacing: 0.1em;
+.appendix {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 2px dashed var(--paper-3);
 }
 .entry-poet {
   font-size: 0.8rem;
