@@ -100,6 +100,8 @@ export default function App() {
             </ol>
             <p className="about-source">
               작품 출처 · <span className="han">紫霞 申緯</span>(1769–1847)가 엮은 『<span className="han">唐詩畫意</span>』의 五言·六言 절구
+            </p>
+            <div className="more-row">
               <button
                 className="link-more"
                 onClick={() => setBookOpen((o) => !o)}
@@ -108,7 +110,7 @@ export default function App() {
               >
                 {bookOpen ? '▲' : '▼'}
               </button>
-            </p>
+            </div>
             {bookOpen && (
               <div className="book-intro">
                 <p>

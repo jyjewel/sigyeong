@@ -498,7 +498,9 @@ img.pixel {
 }
 .confirm {
   width: 100%;
-  padding: 0.8em 1em;
+  padding: 0.45em 1em;
+  font-size: 1.5rem;
+  line-height: 1.2;
 }
 
 @keyframes shake {
@@ -999,10 +1001,13 @@ img.pixel {
 }
 
 /* ── 작품 목록: 책 소개와 부록 ─────────── */
+.more-row {
+  text-align: center;
+  margin: -10px 0 14px;
+}
 .link-more {
-  display: inline;
-  margin-left: 8px;
-  padding: 0 4px;
+  display: inline-block;
+  padding: 2px 16px;
   border: 0;
   background: none;
   color: var(--accent, #8a4b2a);
