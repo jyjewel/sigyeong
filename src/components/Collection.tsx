@@ -120,7 +120,6 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
                     ) : (
                       !!rec?.recallRound && <span className="tag soft">외워 보기 {rec.recallRound}단계</span>
                     )}
-                    {rec?.saved && <span className="tag soft">도감 저장</span>}
                   </p>
                   {rec?.thumbnail && <img src={rec.thumbnail} alt="완성한 풍경" className="pixel detail-thumb" />}
                   <div className="detail-poem han" lang="zh-Hant">

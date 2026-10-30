@@ -6,7 +6,7 @@ import { Finale } from './components/Finale'
 import { Collection } from './components/Collection'
 import { PixelView } from './components/PixelView'
 import { SpriteSheet } from './components/SpriteSheet'
-import { loadSave, markSaved, recordCompletion, recordRecall, writeSave } from './game/storage'
+import { loadSave, recordCompletion, recordRecall, writeSave } from './game/storage'
 import type { AnswerLog, SaveData } from './game/storage'
 import { setMuted } from './game/sound'
 import { Recall } from './components/Recall'
@@ -146,8 +146,6 @@ export default function App() {
           answers={screen.answers}
           mode="complete"
           onRecall={() => setScreen({ kind: 'recall', poemId: poem.id, run: Date.now() })}
-          saved={!!save.records[poem.id]?.saved}
-          onSave={() => setSave((s) => markSaved(s, poem.id))}
           onNext={() => {
             const playable = CATALOG.filter((e) => e.playable)
             const idx = playable.findIndex((e) => e.id === poem.id)

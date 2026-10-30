@@ -17,7 +17,6 @@ export interface PoemRecord {
   plays: number
   answers: AnswerLog[]
   thumbnail?: string
-  saved: boolean
   /** 외워 보기에서 마친 가장 높은 단계 (0~3) */
   recallRound?: number
   /** 마지막 단계를 한 번도 틀리지 않고 마쳤는지 (誦 도장) */
@@ -73,7 +72,6 @@ export function recordCompletion(
     plays: (prev?.plays ?? 0) + 1,
     answers,
     thumbnail: thumbnail ?? prev?.thumbnail,
-    saved: prev?.saved ?? false,
   }
   return { ...d, records: { ...d.records, [poemId]: rec } }
 }
@@ -88,12 +86,6 @@ export function recordRecall(d: SaveData, poemId: string, round: number, perfect
     recited: rec.recited || (round === lastRound && perfect),
   }
   return { ...d, records: { ...d.records, [poemId]: next } }
-}
-
-export function markSaved(d: SaveData, poemId: string): SaveData {
-  const rec = d.records[poemId]
-  if (!rec) return d
-  return { ...d, records: { ...d.records, [poemId]: { ...rec, saved: true } } }
 }
 
 /** 『唐詩畫意』 진행도 (준비 중인 작품까지 전체 수로 센다) */

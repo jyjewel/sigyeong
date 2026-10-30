@@ -11,10 +11,8 @@ interface Props {
   placed: string[]
   perfect?: boolean
   answers?: AnswerLog[]
-  /** 'complete': 방금 완성 / 'replay': 도감에서 다시 보기 */
+  /** 'complete': 방금 완성 / 'replay': 작품 목록에서 다시 보기 */
   mode: 'complete' | 'replay'
-  saved?: boolean
-  onSave?: () => void
   onNext?: () => void
   onClose?: () => void
   /** 외워 보기 시작 */
@@ -58,14 +56,9 @@ export function Finale(props: Props) {
         <button onClick={() => setInfo(true)}>원문과 해설</button>
         {props.onRecall && <button onClick={props.onRecall}>외워 보기</button>}
         {props.mode === 'complete' ? (
-          <>
-            <button onClick={props.onSave} disabled={props.saved}>
-              {props.saved ? '도감에 저장됨 ✓' : '도감에 저장'}
-            </button>
-            <button className="primary" onClick={props.onNext}>
-              다음 시 도전 ▶
-            </button>
-          </>
+          <button className="primary" onClick={props.onNext}>
+            다음 시 도전 ▶
+          </button>
         ) : (
           <button className="primary" onClick={props.onClose}>
             닫기
