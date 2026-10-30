@@ -18,7 +18,7 @@ function roof(ctx: Ctx, x: number, y: number, w: number, tile = '#3c4048', ridge
 }
 
 /** 회상 장면을 담는 엷은 타원 */
-function vignette(ctx: Ctx, cx: number, cy: number, rx: number, ry: number, inner: (ctx: Ctx) => void) {
+export function vignette(ctx: Ctx, cx: number, cy: number, rx: number, ry: number, inner: (ctx: Ctx) => void) {
   withAlpha(ctx, 0.92, () => fillRows(ctx, cy - ry, cy + ry, (y) => {
     const d = (y - cy) / ry
     const w = rx * Math.sqrt(Math.max(0, 1 - d * d))
