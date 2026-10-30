@@ -64,9 +64,11 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         )}
         <div className="entry-title han">{e.title}</div>
         {sub && <div className="entry-poet han">{sub}</div>}
-        <div className="entry-state">
-          {!e.playable ? '준비 중' : rec ? `완료${rec.everPerfect ? ' · 完' : ''}${rec.recited ? ' · 誦' : ''}` : '미완료'}
-        </div>
+        {(!e.playable || rec) && (
+          <div className="entry-state">
+            {!e.playable ? '준비 중' : `완료${rec!.everPerfect ? ' · 完' : ''}${rec!.recited ? ' · 誦' : ''}`}
+          </div>
+        )}
       </button>
     )
   }
@@ -82,11 +84,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
             <>
               {book !== 'app' && <span className="small muted">紫霞 申緯</span>} {BOOK_NAME[book]}
             </>
-          ) : (
-            <>
-              <span className="small muted">책을 골라 펼치세요</span> 書架
-            </>
-          )}
+          ) : null}
         </h1>
         <div className="counter">{book && `${books.find((b) => b.id === book)!.done} / ${books.find((b) => b.id === book)!.total}`}</div>
         <MuteButton />
