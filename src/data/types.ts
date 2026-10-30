@@ -90,4 +90,6 @@ export interface CatalogEntry {
   poem?: Poem
   /** 시대·주제 분류용 태그 */
   tags?: string[]
+  /** 처음 실린 선집. 『唐詩畫意』 차례는 src/data/huayi.ts 가 따로 정한다 (기본: 唐詩三百首) */
+  source?: 'sanbai' | 'huayi'
 }

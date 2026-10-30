@@ -1,5 +1,6 @@
 // 브라우저 localStorage 기반 도감·진행도 저장. 저장소를 쓸 수 없는 환경에서도 게임은 동작한다.
 import { CATALOG, POETS } from '../data/catalog'
+import { HUAYI } from '../data/huayi'
 
 export interface AnswerLog {
   line: string
@@ -99,7 +100,7 @@ export function markSaved(d: SaveData, poemId: string): SaveData {
 /** 시인별 진행률과 배지 획득 여부. 배지는 '게임에 수록된(playable)' 작품을 모두 완성하면 얻는다. */
 export function poetProgress(d: SaveData) {
   return POETS.map((poet) => {
-    const entries = CATALOG.filter((e) => e.poetId === poet.id)
+    const entries = CATALOG.filter((e) => e.poetId === poet.id && (e.source ?? 'sanbai') === 'sanbai')
     const playable = entries.filter((e) => e.playable)
     const done = playable.filter((e) => d.records[e.id])
     return {
@@ -109,10 +110,16 @@ export function poetProgress(d: SaveData) {
       doneCount: done.length,
       badge: playable.length > 0 && done.length === playable.length,
     }
-  })
+  }).filter((p) => p.entries.length > 0)
 }
 
 export function totalProgress(d: SaveData) {
-  const done = CATALOG.filter((e) => d.records[e.id]).length
-  return { done, total: CATALOG.length }
+  const sanbai = CATALOG.filter((e) => (e.source ?? 'sanbai') === 'sanbai')
+  return { done: sanbai.filter((e) => d.records[e.id]).length, total: sanbai.length }
+}
+
+/** 『唐詩畫意』 진행도 (준비 중인 작품까지 전체 수로 센다) */
+export function huayiProgress(d: SaveData) {
+  const items = HUAYI.flatMap((s) => s.items)
+  return { done: items.filter((i) => d.records[i.id]).length, total: items.length }
 }

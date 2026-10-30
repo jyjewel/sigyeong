@@ -8,6 +8,7 @@ import { luzhai } from './poems/luzhai'
 import { shanju } from './poems/shanju'
 import { chunxiao, fengqiao, guanque, jiangxue, xiajiangling } from './poems/batch2a'
 import { chuzhou, jiandejiang, qinhuai, wuyixiang, zhuliguan } from './poems/batch2b'
+import { HUAYI_BATCH1 } from './poems/huayi8a'
 
 // 시인 목록과 배지
 export const POETS: Poet[] = [
@@ -71,6 +72,19 @@ export const POETS: Poet[] = [
     era: '唐',
     badge: { id: 'dumu-river', name: '두목의 진회', description: '수록된 두목의 작품을 모두 완성했습니다.' },
   },
+  // 『唐詩畫意』에서 새로 실은 시인 (唐詩三百首 작품집에는 나오지 않는다)
+  {
+    id: 'luzhaolin',
+    name: '盧照鄰',
+    era: '唐',
+    badge: { id: 'luzhaolin-bird', name: '노조린의 물새', description: '수록된 노조린의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'peidi',
+    name: '裴迪',
+    era: '唐',
+    badge: { id: 'peidi-wangchuan', name: '배적의 망천', description: '수록된 배적의 작품을 모두 완성했습니다.' },
+  },
 ]
 
 // 도감 목록. 새 작품은 poem 객체를 만들어 playable: true 로 등록한다.
@@ -93,7 +107,13 @@ export const CATALOG: CatalogEntry[] = [
   { id: 'jiangxue', title: '江雪', poetId: 'liuzongyuan', playable: true, poem: jiangxue, tags: ['五言絶句', '겨울', '강'] },
   { id: 'wuyixiang', title: '烏衣巷', poetId: 'liuyuxi', playable: true, poem: wuyixiang, tags: ['七言絶句', '저녁', '회고'] },
   { id: 'boqinhuai', title: '泊秦淮', poetId: 'dumu', playable: true, poem: qinhuai, tags: ['七言絶句', '밤', '회고'] },
+  // 申緯 『唐詩畫意』 (차례는 src/data/huayi.ts)
+  ...HUAYI_BATCH1.map((poem): CatalogEntry => ({ id: poem.id, title: poem.title, poetId: poem.poetId, playable: true, poem, source: 'huayi' })),
 ]
+
+export function getEntry(id: string): CatalogEntry | undefined {
+  return CATALOG.find((e) => e.id === id)
+}
 
 export function getPoem(id: string): Poem | undefined {
   return CATALOG.find((e) => e.id === id)?.poem

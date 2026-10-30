@@ -967,3 +967,19 @@ img.pixel {
 .recall .seal {
   animation-delay: 0.3s;
 }
+
+/* ── 도감: 선집 고르기 ─────────────────── */
+.books {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 12px;
+}
+.books button .han {
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+.entry-poet {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
