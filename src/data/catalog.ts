@@ -14,6 +14,7 @@ import { HUAYI_BATCH3 } from './poems/huayi8c'
 import { HUAYI_BATCH4 } from './poems/huayi8d'
 import { HUAYI_BATCH5 } from './poems/huayi9a'
 import { HUAYI_BATCH6 } from './poems/huayi9b'
+import { HUAYI_BATCH7 } from './poems/huayi9c'
 
 // 시인 목록과 배지
 export const POETS: Poet[] = [
@@ -228,6 +229,30 @@ export const POETS: Poet[] = [
     era: '唐',
     badge: { id: 'hanyu-lotus', name: '한유의 물가 정자', description: '수록된 한유의 작품을 모두 완성했습니다.' },
   },
+  {
+    id: 'zhangzhongsu',
+    name: '張仲素',
+    era: '唐',
+    badge: { id: 'zhangzhongsu-swing', name: '장중소의 그네', description: '수록된 장중소의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'zhangji2',
+    name: '張籍',
+    era: '唐',
+    badge: { id: 'zhangji2-plum', name: '장적의 매화 시내', description: '수록된 장적의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'baijuyi',
+    name: '白居易',
+    era: '唐',
+    badge: { id: 'baijuyi-candle', name: '백거이의 붉은 촛불', description: '수록된 백거이의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'sunge',
+    name: '孫革',
+    era: '唐',
+    badge: { id: 'sunge-cloud', name: '손혁의 깊은 구름', description: '수록된 손혁의 작품을 모두 완성했습니다.' },
+  },
 ]
 
 // 도감 목록. 새 작품은 poem 객체를 만들어 playable: true 로 등록한다.
@@ -251,7 +276,7 @@ export const CATALOG: CatalogEntry[] = [
   { id: 'wuyixiang', title: '烏衣巷', poetId: 'liuyuxi', playable: true, poem: wuyixiang, tags: ['七言絶句', '저녁', '회고'] },
   { id: 'boqinhuai', title: '泊秦淮', poetId: 'dumu', playable: true, poem: qinhuai, tags: ['七言絶句', '밤', '회고'] },
   // 申緯 『唐詩畫意』 (차례는 src/data/huayi.ts)
-  ...[...HUAYI_BATCH1, ...HUAYI_BATCH2, ...HUAYI_BATCH3, ...HUAYI_BATCH4, ...HUAYI_BATCH5, ...HUAYI_BATCH6].map((poem): CatalogEntry => ({ id: poem.id, title: poem.title, poetId: poem.poetId, playable: true, poem, source: 'huayi' })),
+  ...[...HUAYI_BATCH1, ...HUAYI_BATCH2, ...HUAYI_BATCH3, ...HUAYI_BATCH4, ...HUAYI_BATCH5, ...HUAYI_BATCH6, ...HUAYI_BATCH7].map((poem): CatalogEntry => ({ id: poem.id, title: poem.title, poetId: poem.poetId, playable: true, poem, source: 'huayi' })),
 ]
 
 export function getEntry(id: string): CatalogEntry | undefined {

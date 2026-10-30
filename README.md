@@ -38,6 +38,7 @@ npm run preview      # 빌드 결과 미리보기
 - `src/data/poems/huayi8d.ts` 卷八 넷째 묶음 10수 (柳中庸, 顧況, 耿湋, 戴叔倫, 盧綸, 李端) — 卷八 완료
 - `src/data/poems/huayi9a.ts` 卷九 첫 묶음 10수 (暢當, 司空曙, 王建)
 - `src/data/poems/huayi9b.ts` 卷九 둘째 묶음 11수 (王建, 劉商, 丘丹, 權德輿 曉·晝·晚, 羊士諤, 裴度, 韓愈)
+- `src/data/poems/huayi9c.ts` 卷九 셋째 묶음 11수 (韓愈, 劉禹錫, 張仲素, 張籍, 白居易, 孫革)
 - `src/render/backgrounds/title.ts` 표지의 봄 꽃나무 풍경
 - `src/render/poems/hy_*.ts` 그림. `hy_kit.ts`는 물가 부품(물·부들·연꽃·백로·작은 배 등)
 - 王維와 裴迪이 같은 곳을 읊은 작품은 배경을 함께 쓴다 (鹿柴, 北垞)
