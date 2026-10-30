@@ -109,7 +109,11 @@ export default function App() {
                 aria-expanded={bookOpen}
                 aria-label={bookOpen ? '『唐詩畫意』 설명 접기' : '『唐詩畫意』 설명 펼치기'}
               >
-                {bookOpen ? '▲' : '▼'}
+                <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M7.5 12h9" />
+                  {!bookOpen && <path d="M12 7.5v9" />}
+                </svg>
               </button>
             </div>
             {bookOpen && (

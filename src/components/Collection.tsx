@@ -62,14 +62,14 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
       </header>
 
       {HUAYI.map((sec) => {
-        const ready = sec.items.filter((i) => getEntry(i.id)?.playable).length
+        const done = sec.items.filter((i) => save.records[i.id]).length
         return (
           <section key={sec.title} className="poet-group">
             <h2>
               <span className="han">{sec.title}</span>
               <span className="small muted">
                 {' '}
-                · {sec.items.length}수 중 {ready}수 수록
+                ({done}/{sec.items.length})
               </span>
             </h2>
             <div className="entries">
@@ -90,7 +90,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
             부록 <span className="han">『唐詩三百首』</span>
             <span className="small muted">
               {' '}
-              · 『唐詩畫意』의 五·六言 절구에 들지 않은 작품 {APPENDIX.length}편 · 완성 {appendixDone}편
+              ({appendixDone}/{APPENDIX.length})
             </span>
           </h2>
           <div className="entries">{APPENDIX.map((e) => card(e, getPoet(e.poetId)?.name))}</div>

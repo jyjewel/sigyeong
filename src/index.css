@@ -1028,7 +1028,8 @@ img.pixel {
   margin: -10px 0 14px;
 }
 .link-more {
-  display: inline-block;
+  display: inline-grid;
+  place-items: center;
   padding: 2px 16px;
   border: 0;
   background: none;
