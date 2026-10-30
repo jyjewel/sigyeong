@@ -3,10 +3,11 @@ import { getEntry, getPoet } from '../data/catalog'
 import { HUAYI } from '../data/huayi'
 import { APPENDIX } from '../data/collection'
 import type { CatalogEntry } from '../data/types'
-import { huayiProgress } from '../game/storage'
 import type { SaveData } from '../game/storage'
 import { PoemInfo } from './Finale'
 import { MuteButton } from './MuteButton'
+import { Shelf } from './Shelf'
+import type { BookId, ShelfBook } from './Shelf'
 
 interface Props {
   save: SaveData
@@ -17,11 +18,35 @@ interface Props {
 }
 
 
+/** 시를 풀고 돌아왔을 때 보던 책을 다시 펼친다 */
+let lastBook: BookId | null = null
+
+const BOOK_NAME: Record<BookId, string> = { v8: '『唐詩畫意』 卷八', v9: '『唐詩畫意』 卷九', app: '부록 『唐詩三百首』' }
+
 export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) {
   const [detail, setDetail] = useState<CatalogEntry | null>(null)
   const [info, setInfo] = useState(false)
-  const huayi = huayiProgress(save)
+  const [book, setBookState] = useState<BookId | null>(lastBook)
+  const setBook = (b: BookId | null) => {
+    lastBook = b
+    setBookState(b)
+    window.scrollTo(0, 0)
+  }
   const appendixDone = APPENDIX.filter((e) => save.records[e.id]).length
+  const secDone = (i: number) => HUAYI[i].items.filter((x) => save.records[x.id]).length
+  const books: ShelfBook[] = [
+    { id: 'v8', title: '唐詩畫意', sub: '卷八', done: secDone(0), total: HUAYI[0].items.length, cover: 'indigo' },
+    {
+      id: 'v9',
+      title: '唐詩畫意',
+      sub: '卷九',
+      done: secDone(1) + secDone(2),
+      total: HUAYI[1].items.length + HUAYI[2].items.length,
+      cover: 'indigo',
+    },
+    { id: 'app', pre: '附錄', title: '唐詩三百首', done: appendixDone, total: APPENDIX.length, cover: 'ochre' },
+  ]
+  const sections = book === 'v8' ? [HUAYI[0]] : book === 'v9' ? [HUAYI[1], HUAYI[2]] : []
 
   const card = (e: CatalogEntry, sub?: string) => {
     const rec = save.records[e.id]
@@ -49,19 +74,27 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
   return (
     <div className="collection">
       <header className="topbar simple">
-        <button className="ghost small" onClick={onBack}>
-          ◁ 처음으로
+        <button className="ghost small" onClick={() => (book ? setBook(null) : onBack())}>
+          {book ? '◁ 書架' : '◁ 처음으로'}
         </button>
         <h1 className="poem-title han">
-          <span className="small muted">紫霞 申緯</span> 『唐詩畫意』
+          {book ? (
+            <>
+              {book !== 'app' && <span className="small muted">紫霞 申緯</span>} {BOOK_NAME[book]}
+            </>
+          ) : (
+            <>
+              <span className="small muted">책을 골라 펼치세요</span> 書架
+            </>
+          )}
         </h1>
-        <div className="counter">
-          {huayi.done} / {huayi.total}
-        </div>
+        <div className="counter">{book && `${books.find((b) => b.id === book)!.done} / ${books.find((b) => b.id === book)!.total}`}</div>
         <MuteButton />
       </header>
 
-      {HUAYI.map((sec) => {
+      {!book && <Shelf books={books} onOpen={setBook} />}
+
+      {sections.map((sec) => {
         const done = sec.items.filter((i) => save.records[i.id]).length
         return (
           <section key={sec.title} className="poet-group">
@@ -84,15 +117,8 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         )
       })}
 
-      {APPENDIX.length > 0 && (
-        <section className="poet-group appendix">
-          <h2>
-            부록 <span className="han">『唐詩三百首』</span>
-            <span className="small muted">
-              {' '}
-              ({appendixDone}/{APPENDIX.length})
-            </span>
-          </h2>
+      {book === 'app' && (
+        <section className="poet-group">
           <div className="entries">{APPENDIX.map((e) => card(e, getPoet(e.poetId)?.name))}</div>
         </section>
       )}

@@ -1205,3 +1205,87 @@ img.pixel {
   background: var(--paper-2);
   padding: 8px;
 }
+
+/* ── 書架 (책가도) ───────────────────────── */
+.shelf {
+  position: relative;
+  width: min(100%, 480px, calc((100vh - 110px) * 0.6));
+  margin: 4px auto 16px;
+  aspect-ratio: 180 / 300;
+}
+.shelf-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 6px 0 #2e1c10;
+}
+.shelf-book {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.shelf-book:hover,
+.shelf-book:focus-visible,
+.shelf-book:active {
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: translateY(-3px);
+  outline: none;
+}
+.shelf-book:focus-visible .shelf-slip {
+  outline: 2px solid var(--gold);
+}
+.shelf-slip {
+  position: absolute;
+  left: 12.5%;
+  top: 8.6%;
+  width: 27.5%;
+  height: 82.8%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 3px;
+  font-weight: 700;
+  font-size: clamp(0.62rem, 2.9vw, 0.95rem);
+  line-height: 1.08;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.shelf-slip small {
+  font-size: 0.8em;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin: 0.35em 0;
+}
+.shelf-seal {
+  position: absolute;
+  right: 14%;
+  bottom: 8%;
+  width: 26%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  background: var(--red);
+  color: #fbf1e4;
+  font-weight: 900;
+  font-size: clamp(0.7rem, 3.4vw, 0.95rem);
+  border-radius: 2px;
+  transform: rotate(-6deg);
+}
+.shelf-prog {
+  position: absolute;
+  font-size: 0.72rem;
+  padding: 0 5px;
+  background: rgba(244, 236, 214, 0.92);
+  border: 1px solid #8a6a42;
+  border-radius: 2px;
+  color: var(--ink);
+  pointer-events: none;
+}

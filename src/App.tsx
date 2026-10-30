@@ -100,7 +100,7 @@ export default function App() {
               <li>완성한 풍경을 보며 「외워 보기」로 빈칸 글자를 채우다 보면 원문이 외워집니다.</li>
             </ol>
             <p className="about-source">
-              작품 출처 · <span className="han">紫霞 申緯</span>(1769–1847)가 엮은 『<span className="han">唐詩畫意</span>』의 五言·六言 절구
+              작품 출처 · <span className="han">紫霞 申緯</span>(1769–1847)가 엮은 『<span className="han">唐詩畫意</span>』의 五言·六言 절구, 부록으로 『<span className="han">唐詩三百首</span>』의 名篇
             </p>
             <div className="more-row">
               <button
