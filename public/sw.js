@@ -1,6 +1,6 @@
 // 詩畫 오프라인 지원: 한 번 연 파일은 저장해 두고, 인터넷이 없을 때 그것으로 연다.
 // 페이지(index.html)는 늘 새 판을 먼저 받아 오고, 받지 못하면 저장해 둔 판을 쓴다.
-const CACHE = 'sihwa-v2'
+const CACHE = 'sihwa-v3'
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './manifest.webmanifest', './icon-192.png'])))
