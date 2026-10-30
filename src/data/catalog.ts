@@ -15,6 +15,7 @@ import { HUAYI_BATCH4 } from './poems/huayi8d'
 import { HUAYI_BATCH5 } from './poems/huayi9a'
 import { HUAYI_BATCH6 } from './poems/huayi9b'
 import { HUAYI_BATCH7 } from './poems/huayi9c'
+import { HUAYI_BATCH8 } from './poems/huayi9d'
 
 // 시인 목록과 배지
 export const POETS: Poet[] = [
@@ -253,6 +254,48 @@ export const POETS: Poet[] = [
     era: '唐',
     badge: { id: 'sunge-cloud', name: '손혁의 깊은 구름', description: '수록된 손혁의 작품을 모두 완성했습니다.' },
   },
+  {
+    id: 'xuning',
+    name: '徐凝',
+    era: '唐',
+    badge: { id: 'xuning-shade', name: '서응의 숲 그늘', description: '수록된 서응의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'xuhun',
+    name: '許渾',
+    era: '唐',
+    badge: { id: 'xuhun-willow', name: '허혼의 버들 그늘', description: '수록된 허혼의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'lishangyin',
+    name: '李商隱',
+    era: '唐',
+    badge: { id: 'lishangyin-sunset', name: '이상은의 석양', description: '수록된 이상은의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'madai',
+    name: '馬戴',
+    era: '唐',
+    badge: { id: 'madai-cave', name: '마대의 구름 굴', description: '수록된 마대의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'wentingyun',
+    name: '溫庭筠',
+    era: '唐',
+    badge: { id: 'wentingyun-apricot', name: '온정균의 산살구꽃', description: '수록된 온정균의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'liujia',
+    name: '劉駕',
+    era: '唐',
+    badge: { id: 'liujia-ox', name: '유가의 목동', description: '수록된 유가의 작품을 모두 완성했습니다.' },
+  },
+  {
+    id: 'yuwuling',
+    name: '于武陵',
+    era: '唐',
+    badge: { id: 'yuwuling-tower', name: '우무릉의 달빛 누각', description: '수록된 우무릉의 작품을 모두 완성했습니다.' },
+  },
 ]
 
 // 도감 목록. 새 작품은 poem 객체를 만들어 playable: true 로 등록한다.
@@ -276,7 +319,7 @@ export const CATALOG: CatalogEntry[] = [
   { id: 'wuyixiang', title: '烏衣巷', poetId: 'liuyuxi', playable: true, poem: wuyixiang, tags: ['七言絶句', '저녁', '회고'] },
   { id: 'boqinhuai', title: '泊秦淮', poetId: 'dumu', playable: true, poem: qinhuai, tags: ['七言絶句', '밤', '회고'] },
   // 申緯 『唐詩畫意』 (차례는 src/data/huayi.ts)
-  ...[...HUAYI_BATCH1, ...HUAYI_BATCH2, ...HUAYI_BATCH3, ...HUAYI_BATCH4, ...HUAYI_BATCH5, ...HUAYI_BATCH6, ...HUAYI_BATCH7].map((poem): CatalogEntry => ({ id: poem.id, title: poem.title, poetId: poem.poetId, playable: true, poem, source: 'huayi' })),
+  ...[...HUAYI_BATCH1, ...HUAYI_BATCH2, ...HUAYI_BATCH3, ...HUAYI_BATCH4, ...HUAYI_BATCH5, ...HUAYI_BATCH6, ...HUAYI_BATCH7, ...HUAYI_BATCH8].map((poem): CatalogEntry => ({ id: poem.id, title: poem.title, poetId: poem.poetId, playable: true, poem, source: 'huayi' })),
 ]
 
 export function getEntry(id: string): CatalogEntry | undefined {
