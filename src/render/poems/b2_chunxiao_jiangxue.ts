@@ -316,12 +316,10 @@ const JX_SKY = { x: 0, y: 10, w: 224, h: 126 }
 
 const jxNoBirds: Sprite = {
   id: 'jx_no_birds',
-  name: '새 끊긴 산에 내리는 눈',
+  name: '새 끊긴 고요한 산',
   z: 85,
   focus: JX_SKY,
   draw(ctx, env) {
-    snowfall(ctx, env.t, 160)
-    snowfall(ctx, env.t * 0.6 + 20, 60, '#eef2f6')
     mistBands(ctx, env.t, [60, 90], '#f4f6f8', 0.35)
   },
 }
@@ -477,6 +475,9 @@ const jxFishing: Sprite = {
     for (let k = 0; k < 18; k++) dot(ctx, tx + k * 0.15, ty + k + (k > 15 ? bob : 0), '#d8dde2')
     const r = mod(env.t * 3, 6)
     withAlpha(ctx, 1 - r / 6, () => px(ctx, tx + 2 - r, ty + 19, r * 2 + 1, 1, '#c8d2da'))
+    // 마지막 글자 ‘雪’에 이르러 비로소 눈이 내린다
+    snowfall(ctx, env.t, 160)
+    snowfall(ctx, env.t * 0.6 + 20, 60, '#eef2f6')
   },
 }
 const jxNet: Sprite = {
