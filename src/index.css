@@ -176,7 +176,7 @@ img.pixel {
   line-height: 1.1;
 }
 .subtitle {
-  margin: 4px 0 12px;
+  margin: 4px 0 22px;
   font-weight: 600;
   letter-spacing: 0.3em;
   color: var(--ink-soft);
@@ -185,11 +185,31 @@ img.pixel {
   margin: 0 0 20px;
   line-height: 1.7;
 }
-.title-book {
-  margin: 0 0 18px;
-  font-size: 0.95rem;
-  letter-spacing: 0.12em;
-  color: var(--ink-soft);
+.about-card {
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  padding: 24px 24px 20px;
+  background: rgba(251, 246, 236, 0.94);
+  line-height: 1.75;
+}
+.about-title {
+  margin: 0 0 10px;
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+}
+.about-steps {
+  margin: 12px 0;
+  padding-left: 1.4em;
+}
+.about-steps li {
+  margin-bottom: 4px;
+}
+.about-source {
+  margin: 14px 0 18px;
+  padding-top: 10px;
+  border-top: 2px dashed var(--paper-3);
+  font-weight: 600;
 }
 .title-card {
   background: rgba(251, 246, 236, 0.9);

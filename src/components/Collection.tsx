@@ -53,7 +53,9 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         <button className="ghost small" onClick={onBack}>
           ◁ 처음으로
         </button>
-        <h1 className="poem-title han">唐詩畫意</h1>
+        <h1 className="poem-title han">
+          <span className="small muted">紫霞 申緯</span> 『唐詩畫意』
+        </h1>
         <div className="counter">
           {huayi.done} / {huayi.total}
         </div>

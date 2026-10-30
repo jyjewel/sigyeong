@@ -17,6 +17,7 @@ type Screen =
   | { kind: 'play'; poemId: string; run: number }
   | { kind: 'finale'; poemId: string; placed: string[]; perfect: boolean; answers: AnswerLog[] }
   | { kind: 'replay'; poemId: string }
+  | { kind: 'about' }
   | { kind: 'collection' }
   | { kind: 'sprites' }
   | { kind: 'recall'; poemId: string; run: number }
@@ -58,12 +59,44 @@ export default function App() {
             <PixelView background="title-spring" placed={[]} label="표지 풍경" fps={30} />
           </div>
           <div className="title-card frame paper">
-            <h1 className="logo han">詩景</h1>
-            <p className="subtitle">한시로 그리는 풍경</p>
-            <p className="title-book han">紫霞 申緯 『唐詩畫意』</p>
-            <button className="primary big" onClick={() => setScreen({ kind: 'collection' })} autoFocus>
+            <h1 className="logo han">詩畫</h1>
+            <p className="subtitle">한시의 풍경</p>
+            <button className="primary big" onClick={() => setScreen({ kind: 'about' })} autoFocus>
               시작하기 ▶
             </button>
+          </div>
+        </div>
+      )
+      break
+    case 'about':
+      body = (
+        <div className="title-screen">
+          <div className="title-bg">
+            <PixelView background="title-spring" placed={[]} label="표지 풍경" fps={30} />
+          </div>
+          <div className="about-card frame paper">
+            <h1 className="about-title">시를 읽고, 풍경을 그리다</h1>
+            <p>
+              <span className="han">詩畫</span>는 한시 한 구절 한 구절이 그려 내는 이미지를 골라 풍경을 쌓아 가며 한시를 배우는 앱입니다.
+              옛사람이 시 속에 담은 그림의 뜻[<span className="han">畫意</span>]을 직접 화면에 구성해 보면서, 글자의 뜻과 시의 짜임을 함께
+              익힙니다.
+            </p>
+            <ol className="about-steps">
+              <li>구절마다 보기 셋 가운데 그 구절의 이미지를 고르면, 풍경에 한 층이 더해집니다.</li>
+              <li>네 구를 모두 맞히면 완성한 풍경과 함께 원문·번역·해설이 펼쳐집니다.</li>
+              <li>완성한 풍경을 보며 「외워 보기」로 빈칸 글자를 채우다 보면 원문이 외워집니다.</li>
+            </ol>
+            <p className="about-source">
+              작품 출처 · <span className="han">紫霞 申緯</span>(1769–1847)가 엮은 『<span className="han">唐詩畫意</span>』의 五言·六言 절구
+            </p>
+            <div className="row center">
+              <button className="ghost" onClick={() => setScreen({ kind: 'title' })}>
+                ◁ 처음으로
+              </button>
+              <button className="primary" onClick={() => setScreen({ kind: 'collection' })} autoFocus>
+                작품 고르기 ▶
+              </button>
+            </div>
           </div>
         </div>
       )
