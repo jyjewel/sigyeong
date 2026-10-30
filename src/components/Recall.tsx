@@ -5,6 +5,7 @@ import { PixelView } from './PixelView'
 import { layersFor, sceneFor } from './Play'
 import { sfx } from '../game/sound'
 import { RECALL_ROUNDS, buildRecall } from '../game/recall'
+import { MuteButton } from './MuteButton'
 
 interface Props {
   poem: Poem
@@ -102,6 +103,7 @@ export function Recall({ poem, onRound, onExit }: Props) {
         <div className="counter">
           외워 보기 <span className="num">{round}</span> / {RECALL_ROUNDS}단계
         </div>
+        <MuteButton />
         <ol className="progress" aria-label="구절 진행도">
           {poem.lines.map((_, k) => (
             <li key={k} className={k < li || phase === 'round-done' || (k === li && phase === 'line-done') ? 'done' : k === li ? 'current' : ''} />

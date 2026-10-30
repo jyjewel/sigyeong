@@ -6,6 +6,7 @@ import type { CatalogEntry } from '../data/types'
 import { huayiProgress } from '../game/storage'
 import type { SaveData } from '../game/storage'
 import { PoemInfo } from './Finale'
+import { MuteButton } from './MuteButton'
 
 interface Props {
   save: SaveData
@@ -57,6 +58,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         <div className="counter">
           {huayi.done} / {huayi.total}
         </div>
+        <MuteButton />
       </header>
 
       {HUAYI.map((sec) => {

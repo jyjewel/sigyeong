@@ -5,6 +5,7 @@ import { getSprite } from '../render/registry'
 import { PixelView, now, snapshot } from './PixelView'
 import { sfx } from '../game/sound'
 import type { AnswerLog } from '../game/storage'
+import { MuteButton } from './MuteButton'
 
 type Phase = 'ask' | 'explain'
 
@@ -129,6 +130,7 @@ export function Play({ poem, onFinish, onExit }: Props) {
         <div className="counter">
           <span className="num">{qi + 1}</span> / {total}
         </div>
+        <MuteButton />
         <ol className="progress" aria-label="정답 진행도">
           {poem.questions.map((_, k) => (
             <li

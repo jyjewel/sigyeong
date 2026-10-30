@@ -12,6 +12,7 @@ import { setMuted } from './game/sound'
 import { Recall } from './components/Recall'
 import { RECALL_ROUNDS } from './game/recall'
 import { Certificate } from './components/Certificate'
+import { MuteButton, MuteContext } from './components/MuteButton'
 import { ALL_IDS, APPENDIX } from './data/collection'
 
 type Screen =
@@ -226,13 +227,10 @@ export default function App() {
   }
 
   return (
+    <MuteContext.Provider value={{ muted: save.muted, toggle: toggleMute }}>
     <div className="app">
       {body}
-      {screen.kind !== 'finale' && screen.kind !== 'replay' && (
-      <button className="mute ghost small" onClick={toggleMute} aria-label={save.muted ? '소리 켜기' : '소리 끄기'}>
-        {save.muted ? '소리 꺼짐' : '소리 켜짐'}
-      </button>
-      )}
+      {(screen.kind === 'title' || screen.kind === 'about') && <MuteButton floating />}
       {cert && screen.kind === 'finale' && (
         <Certificate
           huayiTotal={ALL_IDS.length - APPENDIX.length}
@@ -245,5 +243,6 @@ export default function App() {
       )}
       {CATALOG.length === 0 && <p>작품 데이터가 없습니다.</p>}
     </div>
+    </MuteContext.Provider>
   )
 }
