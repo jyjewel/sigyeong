@@ -48,6 +48,8 @@ export default function App() {
     setScreen({ kind: 'play', poemId, run: Date.now() })
   }, [])
 
+  const [bookOpen, setBookOpen] = useState(false)
+  useEffect(() => window.scrollTo(0, 0), [screen.kind])
   const toggleMute = () => setSave((s) => ({ ...s, muted: !s.muted }))
 
   let body: React.ReactNode = null
@@ -88,7 +90,23 @@ export default function App() {
             </ol>
             <p className="about-source">
               작품 출처 · <span className="han">紫霞 申緯</span>(1769–1847)가 엮은 『<span className="han">唐詩畫意</span>』의 五言·六言 절구
+              <button className="link-more" onClick={() => setBookOpen((o) => !o)} aria-expanded={bookOpen}>
+                {bookOpen ? '접기 ▴' : '더보기 ▾'}
+              </button>
             </p>
+            {bookOpen && (
+              <div className="book-intro">
+                <p>
+                  『<span className="han">唐詩畫意</span>』는 <span className="han">紫霞 申緯</span>(1769–1847)가 그림의 뜻[
+                  <span className="han">畫意</span>]이 살아 있는 당시를 가려 엮은 필사본 시선집입니다. 15권 5책으로, 권두에 申緯의 自序 2편과
+                  徐耕輔·徐淇修의 서문 한 편씩, 모두 4편의 서문이 붙어 있습니다. 이어지는 「例言十五則」과 「畫意總目」에서 시를 가려 뽑은
+                  방법과 원칙, 그리고 시인 118명의 작품 540편이 실렸음을 알 수 있습니다.
+                </p>
+                <p className="small muted">
+                  이 앱에는 그 가운데 卷八·卷九의 五言絶句와 六言絶句 126수를 申緯의 차례대로 실었습니다.
+                </p>
+              </div>
+            )}
             <div className="row center">
               <button className="ghost" onClick={() => setScreen({ kind: 'title' })}>
                 ◁ 처음으로

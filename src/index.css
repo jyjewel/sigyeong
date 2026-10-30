@@ -150,7 +150,7 @@ img.pixel {
   overflow: hidden;
 }
 .title-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   display: grid;
   place-items: center;
@@ -219,12 +219,6 @@ img.pixel {
   margin-bottom: 14px;
 }
 
-@media (max-aspect-ratio: 3/4) {
-  .title-screen {
-    place-items: end center;
-    padding-bottom: 14vh;
-  }
-}
 
 /* ── 게임 화면 ─────────────────────────── */
 .play,
@@ -1005,6 +999,22 @@ img.pixel {
 }
 
 /* ── 작품 목록: 책 소개와 부록 ─────────── */
+.link-more {
+  display: inline;
+  margin-left: 8px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--accent, #8a4b2a);
+  font: inherit;
+  font-size: 0.9em;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.book-intro {
+  text-align: left;
+  margin: -6px 0 16px;
+}
 .book-intro p {
   line-height: 1.75;
   margin: 10px 0 0;

@@ -61,21 +61,6 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         </div>
       </header>
 
-      <section className="frame paper overall book-intro">
-        <div className="bar">
-          <div className="bar-fill" style={{ width: `${(huayi.done / huayi.total) * 100}%` }} />
-        </div>
-        <p>
-          『<span className="han">唐詩畫意</span>』는 紫霞 申緯(1769–1847)가 그림의 뜻[畫意]이 살아 있는 당시를 가려 엮은 필사본 시선집이다.
-          15권 5책으로, 권두에 申緯의 自序 2편과 徐耕輔·徐淇修의 서문 한 편씩, 모두 4편의 서문이 붙어 있다. 이어지는
-          「例言十五則」과 「畫意總目」에서 시를 가려 뽑은 방법과 원칙, 그리고 시인 118명의 작품 540편이 실렸음을 알 수 있다.
-        </p>
-        <p className="small muted">
-          여기에는 그 가운데 卷八·卷九의 五言絶句와 六言絶句 {huayi.total}수를 申緯의 차례대로 싣는다. 풍경을 완성한 작품은 ? 자리에 그 그림이
-          남는다. · 완성 {huayi.done}수
-        </p>
-      </section>
-
       {HUAYI.map((sec) => {
         const ready = sec.items.filter((i) => getEntry(i.id)?.playable).length
         return (
