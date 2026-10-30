@@ -41,6 +41,7 @@ npm run preview      # 빌드 결과 미리보기
 - `src/data/poems/huayi9c.ts` 卷九 셋째 묶음 11수 (韓愈, 劉禹錫, 張仲素, 張籍, 白居易, 孫革)
 - `src/data/poems/huayi9d.ts` 卷九 넷째 묶음 11수 (徐凝, 杜牧, 許渾, 李商隱, 馬戴, 溫庭筠, 劉駕, 于武陵)
 - `src/data/poems/huayi9e.ts` 卷九 다섯째 묶음 10수 (司空圖, 高中丞, 唐彥謙, 韓偓, 太上隱者, 宣宗宮人) — 五言絕句 완료
+- `src/data/poems/huayi9f.ts` 卷九 六言絕句 9수 (王維 田園樂, 劉長卿, 張繼) — 126수 완료
 - `src/render/backgrounds/title.ts` 표지의 봄 꽃나무 풍경
 - `src/render/poems/hy_*.ts` 그림. `hy_kit.ts`는 물가 부품(물·부들·연꽃·백로·작은 배 등)
 - 王維와 裴迪이 같은 곳을 읊은 작품은 배경을 함께 쓴다 (鹿柴, 北垞)

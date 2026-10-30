@@ -17,6 +17,7 @@ import { HUAYI_BATCH6 } from './poems/huayi9b'
 import { HUAYI_BATCH7 } from './poems/huayi9c'
 import { HUAYI_BATCH8 } from './poems/huayi9d'
 import { HUAYI_BATCH9 } from './poems/huayi9e'
+import { HUAYI_BATCH10 } from './poems/huayi9f'
 
 // 시인 목록과 배지
 export const POETS: Poet[] = [
@@ -356,7 +357,7 @@ export const CATALOG: CatalogEntry[] = [
   { id: 'wuyixiang', title: '烏衣巷', poetId: 'liuyuxi', playable: true, poem: wuyixiang, tags: ['七言絶句', '저녁', '회고'] },
   { id: 'boqinhuai', title: '泊秦淮', poetId: 'dumu', playable: true, poem: qinhuai, tags: ['七言絶句', '밤', '회고'] },
   // 申緯 『唐詩畫意』 (차례는 src/data/huayi.ts)
-  ...[...HUAYI_BATCH1, ...HUAYI_BATCH2, ...HUAYI_BATCH3, ...HUAYI_BATCH4, ...HUAYI_BATCH5, ...HUAYI_BATCH6, ...HUAYI_BATCH7, ...HUAYI_BATCH8, ...HUAYI_BATCH9].map((poem): CatalogEntry => ({ id: poem.id, title: poem.title, poetId: poem.poetId, playable: true, poem, source: 'huayi' })),
+  ...[...HUAYI_BATCH1, ...HUAYI_BATCH2, ...HUAYI_BATCH3, ...HUAYI_BATCH4, ...HUAYI_BATCH5, ...HUAYI_BATCH6, ...HUAYI_BATCH7, ...HUAYI_BATCH8, ...HUAYI_BATCH9, ...HUAYI_BATCH10].map((poem): CatalogEntry => ({ id: poem.id, title: poem.title, poetId: poem.poetId, playable: true, poem, source: 'huayi' })),
 ]
 
 export function getEntry(id: string): CatalogEntry | undefined {
