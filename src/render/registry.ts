@@ -19,6 +19,15 @@ import {
   BAISHITAN_SPRITES, JINXIEQUAN_SPRITES, PEI_BEITUO_SPRITES, PEI_LUANJIALAI_SPRITES, PEI_LUZHAI_SPRITES, SHANZHONG_SPRITES, ZUOYE_SPRITES,
   baishitanBackground, jinxiequanBackground, shanzhongBackground, zuoyeBackground,
 } from './poems/hy_b1c'
+import {
+  BAIZHANG_SPRITES, FENGXUE_SPRITES, LUOYANG_SPRITES, SENGFANG_SPRITES, ZHANGSHIBA_SPRITES,
+  baizhangBackground, fengxueBackground, luoyangBackground, sengfangBackground, zhangshibaBackground,
+} from './poems/hy_b2a'
+import { JIANGZHONG_SPRITES, JUHUA_SPRITES, LINGCHE_SPRITES, YUJIE_SPRITES, jiangzhongBackground, juhuaBackground, lingcheBackground, yujieBackground } from './poems/hy_b2b'
+import {
+  BAILU_SPRITES, BAIYING_SPRITES, DONGLIN_SPRITES, QIUPU_SPRITES, XIARI_SPRITES,
+  bailuBackground, baiyingBackground, donglinBackground, qiupuBackground, xiariBackground,
+} from './poems/hy_b2c'
 
 const BACKGROUNDS = new Map<string, Background>()
 const SPRITES = new Map<string, Sprite>()
@@ -39,7 +48,9 @@ for (const bg of [
   // 『唐詩畫意』
   yulangniaoBackground, huazigangBackground, linhutingBackground, nantuoBackground, qihuBackground, luanjialaiBackground,
   peiLuanjialaiBackground, beituoBackground, luciyanBackground, zuoyeBackground, shanzhongBackground, jinxiequanBackground,
-  baishitanBackground,
+  baishitanBackground, luoyangBackground, sengfangBackground, fengxueBackground, zhangshibaBackground, baizhangBackground,
+  lingcheBackground, jiangzhongBackground, juhuaBackground, yujieBackground, qiupuBackground, donglinBackground,
+  bailuBackground, xiariBackground, baiyingBackground,
 ])
   registerBackground(bg)
 for (const list of [
@@ -48,7 +59,9 @@ for (const list of [
   ZHULIGUAN_SPRITES, JIANDEJIANG_SPRITES, CHUZHOU_SPRITES, WUYIXIANG_SPRITES, QINHUAI_SPRITES,
   YULANGNIAO_SPRITES, HUAZIGANG_SPRITES, LINHUTING_SPRITES, NANTUO_SPRITES, QIHU_SPRITES, LUANJIALAI_SPRITES, BEITUO_SPRITES,
   LUCIYAN_SPRITES, ZUOYE_SPRITES, SHANZHONG_SPRITES, PEI_LUZHAI_SPRITES, PEI_LUANJIALAI_SPRITES, JINXIEQUAN_SPRITES,
-  BAISHITAN_SPRITES, PEI_BEITUO_SPRITES,
+  BAISHITAN_SPRITES, PEI_BEITUO_SPRITES, LUOYANG_SPRITES, SENGFANG_SPRITES, FENGXUE_SPRITES, ZHANGSHIBA_SPRITES,
+  BAIZHANG_SPRITES, LINGCHE_SPRITES, JIANGZHONG_SPRITES, JUHUA_SPRITES, YUJIE_SPRITES, QIUPU_SPRITES, DONGLIN_SPRITES,
+  BAILU_SPRITES, XIARI_SPRITES, BAIYING_SPRITES,
 ])
   registerSprites(list)
 
