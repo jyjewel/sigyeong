@@ -55,6 +55,12 @@ import {
 import {
   HANTANG_SPRITES, HUANGYUAN_SPRITES, TIANJIA_SPRITES, WANDIE_SPRITES, YEJU_SPRITES, hantangBackground, huangyuanBackground, tianjiaBackground, wandieBackground, yejuBackground,
 } from './poems/hy_b5b'
+import {
+  CHOUSHI_SPRITES, FENNAN_SPRITES, QIUYE_SPRITES, XIAO_SPRITES, ZHISHI_SPRITES, choushiBackground, fennanBackground, qiuyeBackground, xiaoBackground, zhishiBackground,
+} from './poems/hy_b6a'
+import {
+  QISHU_SPRITES, WAN_SPRITES, XIJU_SPRITES, ZHOU_SPRITES, ZHUTING_SPRITES, ZHUXI_SPRITES, qishuBackground, wanBackground, xijuBackground, zhouBackground, zhutingBackground, zhuxiBackground,
+} from './poems/hy_b6b'
 import { titleBackground } from './backgrounds/title'
 
 const BACKGROUNDS = new Map<string, Background>()
@@ -87,6 +93,8 @@ for (const bg of [
   qiutanBackground, songchenBackground, tingzhengBackground,
   sutanBackground, dqBackground, yaoyuanBackground, shijingBackground, zayanBackground,
   hantangBackground, yejuBackground, huangyuanBackground, wandieBackground, tianjiaBackground,
+  fennanBackground, zhishiBackground, choushiBackground, qiuyeBackground, xiaoBackground,
+  zhouBackground, wanBackground, qishuBackground, xijuBackground, zhutingBackground, zhuxiBackground,
 ])
   registerBackground(bg)
 for (const list of [
@@ -104,6 +112,8 @@ for (const list of [
   BEISHAN_SPRITES, SAIXIA_SPRITES, QIUTAN_SPRITES, SONGCHEN_SPRITES, TINGZHENG_SPRITES,
   SUTAN_SPRITES, DQ_SPRITES, YAOYUAN_SPRITES, SHIJING_SPRITES, ZAYAN_SPRITES,
   HANTANG_SPRITES, YEJU_SPRITES, HUANGYUAN_SPRITES, WANDIE_SPRITES, TIANJIA_SPRITES,
+  FENNAN_SPRITES, ZHISHI_SPRITES, CHOUSHI_SPRITES, QIUYE_SPRITES, XIAO_SPRITES,
+  ZHOU_SPRITES, WAN_SPRITES, QISHU_SPRITES, XIJU_SPRITES, ZHUTING_SPRITES, ZHUXI_SPRITES,
 ])
   registerSprites(list)
 
