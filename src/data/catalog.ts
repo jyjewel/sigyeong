@@ -364,8 +364,22 @@ export function getEntry(id: string): CatalogEntry | undefined {
   return CATALOG.find((e) => e.id === id)
 }
 
+// 사용자가 만든 작품 (自編詩畫帖). 목록(CATALOG)에는 넣지 않고 id 로만 찾는다.
+const USER_POEMS = new Map<string, Poem>()
+
+export function registerUserPoem(poem: Poem) {
+  USER_POEMS.set(poem.id, poem)
+}
+export function unregisterUserPoem(id: string) {
+  USER_POEMS.delete(id)
+}
+
 export function getPoem(id: string): Poem | undefined {
-  return CATALOG.find((e) => e.id === id)?.poem
+  return CATALOG.find((e) => e.id === id)?.poem ?? USER_POEMS.get(id)
+}
+
+export function poetNameOf(poem: Poem): string {
+  return getPoet(poem.poetId)?.name ?? poem.poetName ?? ''
 }
 
 export function getPoet(id: string): Poet | undefined {

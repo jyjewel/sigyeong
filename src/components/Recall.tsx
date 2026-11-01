@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Poem } from '../data/types'
-import { getPoet } from '../data/catalog'
+import { poetNameOf } from '../data/catalog'
 import { PixelView } from './PixelView'
 import { layersFor, sceneFor } from './Play'
 import { sfx } from '../game/sound'
@@ -28,7 +28,7 @@ export function Recall({ poem, onRound, onExit }: Props) {
   const total = poem.lines.length
   const cur = lines[li]
   const blank = cur.blanks[bi]
-  const poet = getPoet(poem.poetId)
+  const poetName = poetNameOf(poem)
 
   // 완성 풍경에서 지금 구절의 조각만 깜박이게 한다
   const byQ = useMemo(() => poem.questions.map((q) => q.choices.find((c) => c.correct)!.sprite), [poem])
@@ -98,7 +98,7 @@ export function Recall({ poem, onRound, onExit }: Props) {
         <h1 className={`poem-title ${poem.title.length > 5 ? 'long' : ''}`}>
           <span className="han">{poem.title}</span>
           <span className="sep">/</span>
-          <span className="han poet">{poet?.name}</span>
+          <span className="han poet">{poetName}</span>
         </h1>
         <div className="counter">
           외워 보기 <span className="num">{round}</span> / {RECALL_ROUNDS}단계

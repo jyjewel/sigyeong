@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Poem } from '../data/types'
-import { getPoet } from '../data/catalog'
+import { poetNameOf } from '../data/catalog'
 import { PixelView } from './PixelView'
 import { sfx } from '../game/sound'
 import type { AnswerLog } from '../game/storage'
@@ -21,7 +21,7 @@ interface Props {
 
 export function Finale(props: Props) {
   const { poem } = props
-  const poet = getPoet(poem.poetId)
+  const poetName = poetNameOf(poem)
   const [run, setRun] = useState(0)
   const [info, setInfo] = useState(false)
 
@@ -36,7 +36,7 @@ export function Finale(props: Props) {
         <div className="finale-poem paper" lang="zh-Hant">
           <div className={`fp-title han ${poem.title.length > 5 ? 'long' : ''}`}>
             {poem.title}
-            <span className="fp-poet">{poet?.name}</span>
+            <span className="fp-poet">{poetName}</span>
           </div>
           {poem.lines.map((l, i) => (
             <div key={i} className="fp-line han" style={{ animationDelay: `${1.4 + i * 0.25}s` }}>
@@ -72,7 +72,7 @@ export function Finale(props: Props) {
 }
 
 export function PoemInfo({ poem, onClose }: { poem: Poem; onClose: () => void }) {
-  const poet = getPoet(poem.poetId)
+  const poetName = poetNameOf(poem)
   return (
     <div className="modal-back" onClick={onClose}>
       <div className="modal frame paper" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="원문과 해설">
@@ -80,7 +80,7 @@ export function PoemInfo({ poem, onClose }: { poem: Poem; onClose: () => void })
           ✕
         </button>
         <h2>
-          <span className="han">{poem.title}</span> <span className="han muted">{poet?.name}</span>
+          <span className="han">{poem.title}</span> <span className="han muted">{poetName}</span>
         </h2>
         <p className="muted small">
           {poem.era}

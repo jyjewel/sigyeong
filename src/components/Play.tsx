@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Poem, Scene } from '../data/types'
-import { getPoet } from '../data/catalog'
+import { poetNameOf } from '../data/catalog'
 import { getSprite } from '../render/registry'
 import { PixelView, now, snapshot } from './PixelView'
 import { sfx } from '../game/sound'
@@ -126,7 +126,7 @@ export function Play({ poem, onFinish, onExit }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [phase, tried, selected, judge, next])
 
-  const poet = getPoet(poem.poetId)
+  const poetName = poetNameOf(poem)
 
   return (
     <div className="play">
@@ -137,7 +137,8 @@ export function Play({ poem, onFinish, onExit }: Props) {
         <h1 className={`poem-title ${poem.title.length > 5 ? 'long' : ''}`}>
           <span className="han">{poem.title}</span>
           <span className="sep">/</span>
-          <span className="han poet">{poet?.name}</span>
+          <span className="han poet">{poetName}</span>
+          {poem.aiGenerated && <span className="tag soft">AI 생성 · 검토 전</span>}
         </h1>
         <div className="counter">
           <span className="num">{qi + 1}</span> / {total}

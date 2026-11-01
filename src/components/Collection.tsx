@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { getEntry, getPoet } from '../data/catalog'
+import { getEntry, getPoet, poetNameOf } from '../data/catalog'
 import { HUAYI } from '../data/huayi'
 import { APPENDIX } from '../data/collection'
-import type { CatalogEntry } from '../data/types'
+import type { CatalogEntry, Poem } from '../data/types'
 import type { SaveData } from '../game/storage'
 import { PoemInfo } from './Finale'
 import { MuteButton } from './MuteButton'
@@ -15,7 +15,14 @@ interface Props {
   onReplay: (id: string) => void
   onRecall: (id: string) => void
   onBack: () => void
+  /** 自編詩畫帖에 꽂힌 시 */
+  userPoems: Poem[]
+  /** 시 넣기 화면으로 (Claude 아티팩트 판에서만) */
+  onCreate?: () => void
 }
+
+/** 自編詩畫帖 만들기가 도는 Claude 아티팩트 */
+const MAKER_URL = 'https://claude.ai/artifact/DUpbFUwW7R3G7PCeKqwKbn'
 
 
 /** 시를 풀고 돌아왔을 때 보던 책을 다시 펼친다 */
@@ -23,7 +30,7 @@ let lastBook: BookId | null = null
 
 const BOOK_NAME: Record<BookId, string> = { v8: '『唐詩畫意』 卷八', v9: '『唐詩畫意』 卷九', app: '부록 『唐詩三百首』', mine: '『自編詩畫帖』' }
 
-export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) {
+export function Collection({ save, onPlay, onReplay, onRecall, onBack, userPoems, onCreate }: Props) {
   const [detail, setDetail] = useState<CatalogEntry | null>(null)
   const [info, setInfo] = useState(false)
   const [book, setBookState] = useState<BookId | null>(lastBook)
@@ -45,7 +52,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
       cover: 'indigo',
     },
     { id: 'app', pre: '附錄', title: '唐詩三百首', done: appendixDone, total: APPENDIX.length, cover: 'ochre' },
-    { id: 'mine', title: '自編詩畫帖', done: 0, cover: 'silk' },
+    { id: 'mine', title: '自編詩畫帖', done: userPoems.length, cover: 'silk' },
   ]
   /** 책을 누르면 먼저 그 책의 소개가 뜬다 */
   const [bookInfo, setBookInfo] = useState<BookId | null>(null)
@@ -85,11 +92,16 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         <h1 className="poem-title han">
           {book ? (
             <>
-              {book !== 'app' && <span className="small muted">紫霞 申緯</span>} {BOOK_NAME[book]}
+              {(book === 'v8' || book === 'v9') && <span className="small muted">紫霞 申緯</span>} {BOOK_NAME[book]}
             </>
           ) : null}
         </h1>
-        <div className="counter">{book && `${books.find((b) => b.id === book)!.done} / ${books.find((b) => b.id === book)!.total}`}</div>
+        <div className="counter">
+          {(() => {
+            const b = book && books.find((x) => x.id === book)
+            return b ? (b.total === undefined ? `${b.done}수` : `${b.done} / ${b.total}`) : null
+          })()}
+        </div>
         <MuteButton />
       </header>
 
@@ -118,6 +130,25 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         )
       })}
 
+      {book === 'mine' && (
+        <section className="poet-group">
+          {onCreate && (
+            <div className="row center mine-actions">
+              <button className="primary" onClick={onCreate}>
+                ✎ 시 넣기
+              </button>
+            </div>
+          )}
+          {userPoems.length === 0 ? (
+            <p className="muted center-text">아직 꽂힌 시가 없습니다.</p>
+          ) : (
+            <div className="entries">
+              {userPoems.map((p) => card({ id: p.id, title: p.title, poetId: p.poetId, playable: true, poem: p }, poetNameOf(p)))}
+            </div>
+          )}
+        </section>
+      )}
+
       {book === 'app' && (
         <section className="poet-group">
           <div className="entries">{APPENDIX.map((e) => card(e, getPoet(e.poetId)?.name))}</div>
@@ -130,7 +161,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
           id={bookInfo}
           book={books.find((x) => x.id === bookInfo)!}
           onOpen={
-            bookInfo === 'mine'
+            bookInfo === 'mine' && !onCreate
               ? undefined
               : () => {
                   setBook(bookInfo)
@@ -154,7 +185,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
                 <>
                   <h2>
                     <span className="han">{poem.title}</span>{' '}
-                    <span className="han muted">{getPoet(poem.poetId)?.name}</span>
+                    <span className="han muted">{poetNameOf(poem)}</span>
                   </h2>
                   <p className="small muted">
                     {poem.era} · {poem.form} · {rec ? `${new Date(rec.completedAt).toLocaleDateString('ko-KR')} 완료 · ${rec.plays}회` : ''}
@@ -241,15 +272,10 @@ function BookInfo({ id, book, onOpen, onClose }: { id: BookId; book: ShelfBook; 
             <h2 className="han">自編詩畫帖</h2>
             <p className="muted">내가 고른 시로 엮는 시화첩</p>
             <p>
-              『<span className="han">唐詩畫意</span>』에 없는 시도 수업에 쓰고 싶다면, 원하는 시를 직접 넣어 이 책에 꽂을 수 있습니다. 시를
-              넣으면 다른 책과 똑같이 구절마다 그림 문제, 원문과 해설, 외워 보기가 함께 만들어집니다.
+              원하는 시를 직접 넣어 이 책에 꽂을 수 있습니다. 시를 넣으면 다른 책과 똑같이 구절마다 그림 문제, 원문과 해설, 외워 보기가
+              함께 만들어집니다.
             </p>
-            <ol className="about-steps">
-              <li>이 앱의 설계도를 내 GitHub 계정으로 복사해 나만의 앱을 만듭니다.</li>
-              <li>내 Claude 계정의 Claude Code에서 「春夜喜雨를 넣어 줘」처럼 부탁합니다.</li>
-              <li>잠시 뒤 내 앱의 이 책에 그 시가 꽂힙니다.</li>
-            </ol>
-            <p className="small muted">아직 꽂힌 시가 없습니다. 시작하는 방법은 곧 안내합니다.</p>
+            <p className="small muted">(테스트 중) · 꽂힌 시 {book.done}수</p>
           </>
         )}
         <div className="row center">
@@ -257,6 +283,13 @@ function BookInfo({ id, book, onOpen, onClose }: { id: BookId; book: ShelfBook; 
             <button className="primary" onClick={onOpen} autoFocus>
               책 펼치기 ▶
             </button>
+          ) : id === 'mine' ? (
+            <>
+              <a className="button primary" href={MAKER_URL} target="_blank" rel="noopener">
+                Claude로 시 넣기 ↗
+              </a>
+              <button onClick={onClose}>닫기</button>
+            </>
           ) : (
             <button className="primary" onClick={onClose} autoFocus>
               닫기

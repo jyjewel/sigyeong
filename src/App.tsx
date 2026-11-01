@@ -14,6 +14,12 @@ import { RECALL_ROUNDS } from './game/recall'
 import { Certificate } from './components/Certificate'
 import { MuteButton, MuteContext } from './components/MuteButton'
 import { ALL_IDS, APPENDIX } from './data/collection'
+import { Create } from './components/Create'
+import { loadUserPoems } from './ai/store'
+import type { GeneratedPoem } from './ai/generate'
+
+/** 自編詩畫帖에 시를 만들어 넣는 기능은 Claude 아티팩트 판(`npm run build:artifact`)에서만 돈다 */
+const AI = import.meta.env.MODE === 'artifact'
 
 type Screen =
   | { kind: 'title' }
@@ -24,6 +30,7 @@ type Screen =
   | { kind: 'collection' }
   | { kind: 'sprites' }
   | { kind: 'recall'; poemId: string; run: number }
+  | { kind: 'create' }
 
 /** 완성 상태의 레이어 (도감에서 다시 보기용) */
 function fullLayers(poem: Poem) {
@@ -34,6 +41,8 @@ function fullLayers(poem: Poem) {
 
 export default function App() {
   const [save, setSave] = useState<SaveData>(() => loadSave())
+  // 화면 상태보다 먼저 등록해야 #finale-작품id 로 바로 열 수 있다
+  const [userPoems, setUserPoems] = useState<GeneratedPoem[]>(() => (AI ? loadUserPoems() : []))
   const [screen, setScreen] = useState<Screen>(() =>
     location.hash === '#sprites'
       ? { kind: 'sprites' }
@@ -142,6 +151,7 @@ export default function App() {
           mode="complete"
           onRecall={() => setScreen({ kind: 'recall', poemId: poem.id, run: Date.now() })}
           onNext={() => {
+            if (poem.aiGenerated) return setScreen({ kind: 'collection' })
             const playable = CATALOG.filter((e) => e.playable)
             const idx = playable.findIndex((e) => e.id === poem.id)
             const rest = [...playable.slice(idx + 1), ...playable.slice(0, idx)]
@@ -179,6 +189,19 @@ export default function App() {
           onReplay={(id) => setScreen({ kind: 'replay', poemId: id })}
           onRecall={(id) => setScreen({ kind: 'recall', poemId: id, run: Date.now() })}
           onBack={() => setScreen({ kind: 'title' })}
+          userPoems={userPoems.map((g) => g.poem)}
+          onCreate={AI ? () => setScreen({ kind: 'create' }) : undefined}
+        />
+      )
+      break
+    case 'create':
+      body = (
+        <Create
+          poems={userPoems}
+          onChange={setUserPoems}
+          onPlay={start}
+          onBack={() => setScreen({ kind: 'collection' })}
+          layersOf={fullLayers}
         />
       )
       break
