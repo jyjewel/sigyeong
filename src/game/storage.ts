@@ -88,6 +88,14 @@ export function recordRecall(d: SaveData, poemId: string, round: number, perfect
   return { ...d, records: { ...d.records, [poemId]: next } }
 }
 
+/** 작품 기록을 지운다 (自編詩畫帖에서 지운 시) */
+export function forgetRecord(d: SaveData, poemId: string): SaveData {
+  if (!d.records[poemId]) return d
+  const records = { ...d.records }
+  delete records[poemId]
+  return { ...d, records }
+}
+
 /** 『唐詩畫意』 진행도 (준비 중인 작품까지 전체 수로 센다) */
 export function huayiProgress(d: SaveData) {
   const items = HUAYI.flatMap((s) => s.items)

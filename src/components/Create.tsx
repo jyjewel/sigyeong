@@ -5,11 +5,13 @@ import { PixelView } from './PixelView'
 import { errorMessage, generatePoem, getSample, openPermissions, splitLines, whyUnavailable } from '../ai/generate'
 import type { Unavailable } from '../ai/generate'
 import type { GeneratedPoem } from '../ai/generate'
-import { deleteUserPoem, saveUserPoem } from '../ai/store'
+import { saveUserPoem } from '../ai/store'
 
 interface Props {
   poems: GeneratedPoem[]
   onChange: (poems: GeneratedPoem[]) => void
+  /** 시와 그 풀이 기록을 함께 지운다 */
+  onRemove: (id: string) => void
   onPlay: (id: string) => void
   onBack: () => void
   /** 완성 상태의 배경·레이어 (App 의 fullLayers) */
@@ -20,7 +22,7 @@ const SAMPLE = { title: '靜夜思', poet: '李白', text: '床前明月光\n疑
 
 type Status = { kind: 'idle' } | { kind: 'working'; chars: number; lines: number } | { kind: 'error'; message: string }
 
-export function Create({ poems, onChange, onPlay, onBack, layersOf }: Props) {
+export function Create({ poems, onChange, onRemove, onPlay, onBack, layersOf }: Props) {
   const [available, setAvailable] = useState<boolean | null>(null)
   const [why, setWhy] = useState<Unavailable | null>(null)
   const [panelFailed, setPanelFailed] = useState(false)
@@ -74,8 +76,7 @@ export function Create({ poems, onChange, onPlay, onBack, layersOf }: Props) {
   const remove = (id: string) => {
     if (pendingDelete !== id) return setPendingDelete(id)
     setPendingDelete(null)
-    deleteUserPoem(id)
-    onChange(poems.filter((p) => p.poem.id !== id))
+    onRemove(id)
     if (result?.poem.id === id) setResult(null)
   }
 

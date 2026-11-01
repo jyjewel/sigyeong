@@ -239,7 +239,7 @@ export function Shelf({ books, onOpen }: { books: ShelfBook[]; onOpen: (id: Book
       {books.map((b, i) => {
         const r = bookRect(CELLS.book[i])
         const cell = CELLS.book[i]
-        const complete = b.total !== undefined && b.done === b.total
+        const complete = !!b.total && b.done === b.total
         return [
           <span
             key={`${b.id}-p`}

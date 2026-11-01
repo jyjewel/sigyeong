@@ -6,7 +6,7 @@ import { Finale } from './components/Finale'
 import { Collection } from './components/Collection'
 import { PixelView } from './components/PixelView'
 import { SpriteSheet } from './components/SpriteSheet'
-import { loadSave, recordCompletion, recordRecall, writeSave } from './game/storage'
+import { forgetRecord, loadSave, recordCompletion, recordRecall, writeSave } from './game/storage'
 import type { AnswerLog, SaveData } from './game/storage'
 import { setMuted } from './game/sound'
 import { Recall } from './components/Recall'
@@ -15,7 +15,7 @@ import { Certificate } from './components/Certificate'
 import { MuteButton, MuteContext } from './components/MuteButton'
 import { ALL_IDS, APPENDIX } from './data/collection'
 import { Create } from './components/Create'
-import { loadUserPoems } from './ai/store'
+import { deleteUserPoem, loadUserPoems } from './ai/store'
 import type { GeneratedPoem } from './ai/generate'
 
 /** 自編詩畫帖에 시를 만들어 넣는 기능은 Claude 아티팩트 판(`npm run build:artifact`)에서만 돈다 */
@@ -55,6 +55,13 @@ export default function App() {
     setMuted(save.muted)
     writeSave(save)
   }, [save])
+
+  /** 自編詩畫帖에서 시를 지운다: 시와 그 풀이 기록을 함께 */
+  const removeUserPoem = (id: string) => {
+    deleteUserPoem(id)
+    setUserPoems((list) => list.filter((g) => g.poem.id !== id))
+    setSave((s) => forgetRecord(s, id))
+  }
 
   const start = useCallback((poemId: string) => {
     setScreen({ kind: 'play', poemId, run: Date.now() })
@@ -191,6 +198,7 @@ export default function App() {
           onBack={() => setScreen({ kind: 'title' })}
           userPoems={userPoems.map((g) => g.poem)}
           onCreate={AI ? () => setScreen({ kind: 'create' }) : undefined}
+          onRemove={AI ? removeUserPoem : undefined}
         />
       )
       break
@@ -199,6 +207,7 @@ export default function App() {
         <Create
           poems={userPoems}
           onChange={setUserPoems}
+          onRemove={removeUserPoem}
           onPlay={start}
           onBack={() => setScreen({ kind: 'collection' })}
           layersOf={fullLayers}

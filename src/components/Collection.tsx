@@ -19,6 +19,8 @@ interface Props {
   userPoems: Poem[]
   /** 시 넣기 화면으로 (Claude 아티팩트 판에서만) */
   onCreate?: () => void
+  /** 自編詩畫帖의 시를 지운다 (Claude 아티팩트 판에서만) */
+  onRemove?: (id: string) => void
 }
 
 /** 自編詩畫帖 만들기가 도는 Claude 아티팩트 */
@@ -30,9 +32,11 @@ let lastBook: BookId | null = null
 
 const BOOK_NAME: Record<BookId, string> = { v8: '『唐詩畫意』 卷八', v9: '『唐詩畫意』 卷九', app: '부록 『唐詩三百首』', mine: '『自編詩畫帖』' }
 
-export function Collection({ save, onPlay, onReplay, onRecall, onBack, userPoems, onCreate }: Props) {
+export function Collection({ save, onPlay, onReplay, onRecall, onBack, userPoems, onCreate, onRemove }: Props) {
   const [detail, setDetail] = useState<CatalogEntry | null>(null)
   const [info, setInfo] = useState(false)
+  /** 自編詩畫帖의 시는 두 번 눌러야 지워진다 */
+  const [pendingDelete, setPendingDelete] = useState<string | null>(null)
   const [book, setBookState] = useState<BookId | null>(lastBook)
   const setBook = (b: BookId | null) => {
     lastBook = b
@@ -52,7 +56,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack, userPoems
       cover: 'indigo',
     },
     { id: 'app', pre: '附錄', title: '唐詩三百首', done: appendixDone, total: APPENDIX.length, cover: 'ochre' },
-    { id: 'mine', title: '自編詩畫帖', done: userPoems.length, cover: 'silk' },
+    { id: 'mine', title: '自編詩畫帖', done: userPoems.filter((p) => save.records[p.id]).length, total: userPoems.length, cover: 'silk' },
   ]
   /** 책을 누르면 먼저 그 책의 소개가 뜬다 */
   const [bookInfo, setBookInfo] = useState<BookId | null>(null)
@@ -65,7 +69,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack, userPoems
         key={e.id}
         className={`entry frame ${rec ? 'done' : ''} ${e.playable ? '' : 'locked'}`}
         disabled={!e.playable}
-        onClick={() => (rec ? setDetail(e) : onPlay(e.id))}
+        onClick={() => (rec || (e.poem?.aiGenerated && onRemove) ? setDetail(e) : onPlay(e.id))}
       >
         {rec?.thumbnail ? (
           <img src={rec.thumbnail} alt="" className="pixel thumb" />
@@ -173,7 +177,13 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack, userPoems
       )}
 
       {detail && detail.poem && (
-        <div className="modal-back" onClick={() => setDetail(null)}>
+        <div
+          className="modal-back"
+          onClick={() => {
+            setDetail(null)
+            setPendingDelete(null)
+          }}
+        >
           <div className="modal frame paper" onClick={(ev) => ev.stopPropagation()}>
             <button className="modal-x ghost" onClick={() => setDetail(null)} aria-label="닫기">
               ✕
@@ -188,7 +198,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack, userPoems
                     <span className="han muted">{poetNameOf(poem)}</span>
                   </h2>
                   <p className="small muted">
-                    {poem.era} · {poem.form} · {rec ? `${new Date(rec.completedAt).toLocaleDateString('ko-KR')} 완료 · ${rec.plays}회` : ''}
+                    {poem.era} · {poem.form}{rec ? ` · ${new Date(rec.completedAt).toLocaleDateString('ko-KR')} 완료 · ${rec.plays}회` : ''}
                     {rec?.everPerfect && <span className="tag">完</span>}
                     {rec?.recited ? (
                       <span className="tag">誦 암송</span>
@@ -203,12 +213,33 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack, userPoems
                     ))}
                   </div>
                   <div className="row">
-                    <button className="primary" onClick={() => onReplay(detail.id)}>
-                      완성 애니메이션 다시 보기
-                    </button>
-                    <button onClick={() => setInfo(true)}>원문과 해설</button>
-                    <button onClick={() => onRecall(detail.id)}>외워 보기</button>
-                    <button onClick={() => onPlay(detail.id)}>다시 도전</button>
+                    {rec ? (
+                      <>
+                        <button className="primary" onClick={() => onReplay(detail.id)}>
+                          완성 애니메이션 다시 보기
+                        </button>
+                        <button onClick={() => setInfo(true)}>원문과 해설</button>
+                        <button onClick={() => onRecall(detail.id)}>외워 보기</button>
+                        <button onClick={() => onPlay(detail.id)}>다시 도전</button>
+                      </>
+                    ) : (
+                      <button className="primary" onClick={() => onPlay(detail.id)}>
+                        풀기 ▶
+                      </button>
+                    )}
+                    {detail.poem?.aiGenerated && onRemove && (
+                      <button
+                        className="ghost"
+                        onClick={() => {
+                          if (pendingDelete !== detail.id) return setPendingDelete(detail.id)
+                          onRemove(detail.id)
+                          setPendingDelete(null)
+                          setDetail(null)
+                        }}
+                      >
+                        {pendingDelete === detail.id ? '정말 지우기' : '지우기'}
+                      </button>
+                    )}
                   </div>
                 </>
               )
@@ -275,7 +306,7 @@ function BookInfo({ id, book, onOpen, onClose }: { id: BookId; book: ShelfBook; 
               원하는 시를 직접 넣어 이 책에 꽂을 수 있습니다. 시를 넣으면 다른 책과 똑같이 구절마다 그림 문제, 원문과 해설, 외워 보기가
               함께 만들어집니다.
             </p>
-            <p className="small muted">(테스트 중) · 꽂힌 시 {book.done}수</p>
+            <p className="small muted">(테스트 중) · 꽂힌 시 {book.total ?? 0}수</p>
           </>
         )}
         <div className="row center">
