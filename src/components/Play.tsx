@@ -6,6 +6,7 @@ import { PixelView, now, snapshot } from './PixelView'
 import { sfx } from '../game/sound'
 import type { AnswerLog } from '../game/storage'
 import { MuteButton } from './MuteButton'
+import { HANJA_HUN } from '../data/hanja'
 
 type Phase = 'ask' | 'explain'
 
@@ -27,6 +28,17 @@ interface Props {
 export function Play({ poem, onFinish, onExit }: Props) {
   const total = poem.questions.length
   const [qi, setQi] = useState(0)
+  /** 눌러서 훈음을 띄운 글자 (구절 안 위치) */
+  const [gloss, setGloss] = useState<number | null>(null)
+  useEffect(() => setGloss(null), [qi])
+  useEffect(() => {
+    if (gloss === null) return
+    const close = (e: PointerEvent) => {
+      if (!(e.target as Element).closest?.('.verse-line')) setGloss(null)
+    }
+    document.addEventListener('pointerdown', close)
+    return () => document.removeEventListener('pointerdown', close)
+  }, [gloss])
   const [placedByQ, setPlacedByQ] = useState<(string | null)[]>(() => poem.questions.map(() => null))
   const [order, setOrder] = useState<number[]>([])
   const [phase, setPhase] = useState<Phase>('ask')
@@ -157,9 +169,33 @@ export function Play({ poem, onFinish, onExit }: Props) {
       <section className="console">
         <div className="verse frame paper">
           <div className="verse-line han" lang="zh-Hant">
-            {q.line.split('').map((ch, k) => (
-              <span key={k}>{ch}</span>
-            ))}
+            {q.line.split('').map((ch, k) => {
+              const hun = HANJA_HUN[ch]
+              if (!hun) return <span key={k}>{ch}</span>
+              return (
+                <span
+                  key={k}
+                  className={`gch ${gloss === k ? 'on' : ''}`}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${ch} ${hun}`}
+                  onClick={() => setGloss(gloss === k ? null : k)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      setGloss(gloss === k ? null : k)
+                    }
+                  }}
+                >
+                  {ch}
+                  {gloss === k && (
+                    <span className="gtip" role="tooltip">
+                      {hun}
+                    </span>
+                  )}
+                </span>
+              )
+            })}
           </div>
           {phase === 'ask' ? (
             <>
