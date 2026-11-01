@@ -243,7 +243,7 @@ function BookInfo({ id, book, onOpen, onClose }: { id: BookId; book: ShelfBook; 
           <>
             <h2 className="han">唐詩畫意 {id === 'v8' ? '卷八' : '卷九'}</h2>
             <p className="muted">
-              {id === 'v8' ? '五言絕句 上 63수' : '五言絕句 下 54수 · 六言絕句 9수'} · 完成 {book.done} / {book.total}
+              {id === 'v8' ? '五言絕句 上 63수' : '五言絕句 下 54수 · 六言絕句 9수'}
             </p>
             {huayiIntro}
             <p className="small muted">
@@ -256,7 +256,7 @@ function BookInfo({ id, book, onOpen, onClose }: { id: BookId; book: ShelfBook; 
               부록 <span className="han">唐詩三百首</span>
             </h2>
             <p className="muted">
-              名篇 {book.total}수 · 完成 {book.done} / {book.total}
+              名篇 {book.total}수
             </p>
             <p>
               『<span className="han">唐詩三百首</span>』는 淸 乾隆 연간에 <span className="han">蘅塘退士 孫洙</span>(1711–1778)가 엮은 당시
