@@ -21,7 +21,7 @@ interface Props {
 /** 시를 풀고 돌아왔을 때 보던 책을 다시 펼친다 */
 let lastBook: BookId | null = null
 
-const BOOK_NAME: Record<BookId, string> = { v8: '『唐詩畫意』 卷八', v9: '『唐詩畫意』 卷九', app: '부록 『唐詩三百首』' }
+const BOOK_NAME: Record<BookId, string> = { v8: '『唐詩畫意』 卷八', v9: '『唐詩畫意』 卷九', app: '부록 『唐詩三百首』', mine: '『自編詩畫帖』' }
 
 export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) {
   const [detail, setDetail] = useState<CatalogEntry | null>(null)
@@ -45,7 +45,10 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
       cover: 'indigo',
     },
     { id: 'app', pre: '附錄', title: '唐詩三百首', done: appendixDone, total: APPENDIX.length, cover: 'ochre' },
+    { id: 'mine', title: '自編詩畫帖', done: 0, cover: 'silk' },
   ]
+  /** 책을 누르면 먼저 그 책의 소개가 뜬다 */
+  const [bookInfo, setBookInfo] = useState<BookId | null>(null)
   const sections = book === 'v8' ? [HUAYI[0]] : book === 'v9' ? [HUAYI[1], HUAYI[2]] : []
 
   const card = (e: CatalogEntry, sub?: string) => {
@@ -90,7 +93,7 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         <MuteButton />
       </header>
 
-      {!book && <Shelf books={books} onOpen={setBook} />}
+      {!book && <Shelf books={books} onOpen={setBookInfo} />}
 
       {sections.map((sec) => {
         const done = sec.items.filter((i) => save.records[i.id]).length
@@ -121,6 +124,22 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
         </section>
       )}
 
+
+      {bookInfo && (
+        <BookInfo
+          id={bookInfo}
+          book={books.find((x) => x.id === bookInfo)!}
+          onOpen={
+            bookInfo === 'mine'
+              ? undefined
+              : () => {
+                  setBook(bookInfo)
+                  setBookInfo(null)
+                }
+          }
+          onClose={() => setBookInfo(null)}
+        />
+      )}
 
       {detail && detail.poem && (
         <div className="modal-back" onClick={() => setDetail(null)}>
@@ -169,6 +188,82 @@ export function Collection({ save, onPlay, onReplay, onRecall, onBack }: Props) 
       {info && detail?.poem && (
         <PoemInfo poem={detail.poem} onClose={() => setInfo(false)} />
       )}
+    </div>
+  )
+}
+
+/** 책장에서 책을 눌렀을 때 뜨는 책 소개 */
+function BookInfo({ id, book, onOpen, onClose }: { id: BookId; book: ShelfBook; onOpen?: () => void; onClose: () => void }) {
+  const huayiIntro = (
+    <p>
+      『<span className="han">唐詩畫意</span>』는 <span className="han">紫霞 申緯</span>(1769–1847)가 그림의 뜻[<span className="han">畫意</span>]이
+      살아 있는 당시를 가려 엮은 필사본 시선집입니다. 15권 5책으로, 권두에 申緯의 自序 2편과 徐耕輔·徐淇修의 서문 한 편씩, 모두 4편의
+      서문이 붙어 있습니다. 이어지는 「例言十五則」과 「畫意總目」에서 시를 가려 뽑은 방법과 원칙, 그리고 시인 118명의 작품 540편이
+      실렸음을 알 수 있습니다.
+    </p>
+  )
+  return (
+    <div className="modal-back" onClick={onClose}>
+      <div className="modal frame paper book-info" onClick={(ev) => ev.stopPropagation()}>
+        <button className="modal-x ghost" onClick={onClose} aria-label="닫기">
+          ✕
+        </button>
+        {id === 'v8' || id === 'v9' ? (
+          <>
+            <h2 className="han">唐詩畫意 {id === 'v8' ? '卷八' : '卷九'}</h2>
+            <p className="muted">
+              {id === 'v8' ? '五言絕句 上 63수' : '五言絕句 下 54수 · 六言絕句 9수'} · 完成 {book.done} / {book.total}
+            </p>
+            {huayiIntro}
+            <p className="small muted">
+              이 앱에는 그 가운데 卷八·卷九의 五言絶句와 六言絶句 126수를 申緯의 차례대로 실었습니다.
+            </p>
+          </>
+        ) : id === 'app' ? (
+          <>
+            <h2>
+              부록 <span className="han">唐詩三百首</span>
+            </h2>
+            <p className="muted">
+              名篇 {book.total}수 · 完成 {book.done} / {book.total}
+            </p>
+            <p>
+              『<span className="han">唐詩三百首</span>』는 淸 乾隆 연간에 <span className="han">蘅塘退士 孫洙</span>(1711–1778)가 엮은 당시
+              선집으로, 시인 77명의 작품 300여 수를 담아 오늘날까지 가장 널리 읽히는 당시 입문서입니다.
+            </p>
+            <p className="small muted">
+              이 앱에는 그 가운데 『唐詩畫意』의 五言·六言 절구에 들지 않은 名篇 {book.total}수를 부록으로 실었습니다. 율시와 칠언절구도 함께
+              들어 있습니다.
+            </p>
+          </>
+        ) : (
+          <>
+            <h2 className="han">自編詩畫帖</h2>
+            <p className="muted">내가 고른 시로 엮는 시화첩</p>
+            <p>
+              『<span className="han">唐詩畫意</span>』에 없는 시도 수업에 쓰고 싶다면, 원하는 시를 직접 넣어 이 책에 꽂을 수 있습니다. 시를
+              넣으면 다른 책과 똑같이 구절마다 그림 문제, 원문과 해설, 외워 보기가 함께 만들어집니다.
+            </p>
+            <ol className="about-steps">
+              <li>이 앱의 설계도를 내 GitHub 계정으로 복사해 나만의 앱을 만듭니다.</li>
+              <li>내 Claude 계정의 Claude Code에서 「春夜喜雨를 넣어 줘」처럼 부탁합니다.</li>
+              <li>잠시 뒤 내 앱의 이 책에 그 시가 꽂힙니다.</li>
+            </ol>
+            <p className="small muted">아직 꽂힌 시가 없습니다. 시작하는 방법은 곧 안내합니다.</p>
+          </>
+        )}
+        <div className="row center">
+          {onOpen ? (
+            <button className="primary" onClick={onOpen} autoFocus>
+              책 펼치기 ▶
+            </button>
+          ) : (
+            <button className="primary" onClick={onClose} autoFocus>
+              닫기
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

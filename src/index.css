@@ -219,12 +219,6 @@ img.pixel {
 .about-steps li {
   margin-bottom: 4px;
 }
-.about-source {
-  margin: 14px 0 18px;
-  padding-top: 10px;
-  border-top: 2px dashed var(--paper-3);
-  font-weight: 600;
-}
 .title-card {
   background: rgba(251, 246, 236, 0.9);
 }
@@ -1081,31 +1075,6 @@ img.pixel {
 }
 
 /* ── 작품 목록: 책 소개와 부록 ─────────── */
-.more-row {
-  text-align: center;
-  margin: -10px 0 14px;
-}
-.link-more {
-  display: inline-grid;
-  place-items: center;
-  padding: 2px 16px;
-  border: 0;
-  background: none;
-  color: var(--accent, #8a4b2a);
-  font: inherit;
-  font-size: 0.8em;
-  cursor: pointer;
-  box-shadow: none;
-  transform: none;
-}
-.book-intro {
-  text-align: left;
-  margin: -6px 0 16px;
-}
-.book-intro p {
-  line-height: 1.75;
-  margin: 10px 0 0;
-}
 .appendix {
   margin-top: 28px;
   padding-top: 14px;

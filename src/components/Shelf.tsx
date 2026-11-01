@@ -10,7 +10,7 @@ const GAP = 4
 const WIDE = 96
 const NARROW = 72
 
-export type BookId = 'v8' | 'v9' | 'app'
+export type BookId = 'v8' | 'v9' | 'app' | 'mine'
 
 export interface ShelfBook {
   id: BookId
@@ -20,8 +20,9 @@ export interface ShelfBook {
   /** 띠지 아래쪽 작은 글자 (卷八) */
   sub?: string
   done: number
-  total: number
-  cover: 'indigo' | 'ochre'
+  /** 정해진 수가 없는 책(自編詩畫帖)은 비워 둔다 */
+  total?: number
+  cover: 'indigo' | 'ochre' | 'silk'
 }
 
 interface Cell {
@@ -40,12 +41,9 @@ function cells(): { book: Cell[]; things: Cell[] } {
     const wideLeft = r % 2 === 0
     const wide = { x: wideLeft ? 4 : 4 + NARROW + GAP, y, w: WIDE, h: ROW_H }
     const narrow = { x: wideLeft ? 4 + WIDE + GAP : 4, y, w: NARROW, h: ROW_H }
-    // 0·1·3 줄의 넓은 칸에 책, 2 줄은 족자
-    if (r === 2) things.push(wide, narrow)
-    else {
-      book.push(wide)
-      things.push(narrow)
-    }
+    // 넓은 칸에 책, 좁은 칸에 문방구
+    book.push(wide)
+    things.push(narrow)
   }
   return { book, things }
 }
@@ -57,6 +55,7 @@ const bookRect = (c: Cell) => ({ x: c.x + Math.round((c.w - BOOK_W) / 2), y: c.y
 const COVERS = {
   indigo: { base: '#2f4466', dark: '#1d2b44', dot: '#3c5478' },
   ochre: { base: '#a5683a', dark: '#6e4022', dot: '#b87a48' },
+  silk: { base: '#efe9da', dark: '#b9ad92', dot: '#e2dac6' },
 }
 
 function cabinet(ctx: Ctx) {
@@ -85,8 +84,9 @@ function book(ctx: Ctx, c: Cell, cover: ShelfBook['cover']) {
   // 실 꿰맨 자리
   for (let i = 0; i < 5; i++) {
     const y = r.y + 5 + i * ((r.h - 10) / 4)
-    px(ctx, r.x + r.w - 4, Math.round(y), 1, 1, '#e8dcc0')
-    px(ctx, r.x + r.w - 3, Math.round(y), 2, 1, '#e8dcc0')
+    const thread = cover === 'silk' ? '#b8a888' : '#e8dcc0'
+    px(ctx, r.x + r.w - 4, Math.round(y), 1, 1, thread)
+    px(ctx, r.x + r.w - 3, Math.round(y), 2, 1, thread)
   }
   px(ctx, r.x + r.w - 5, r.y + 2, 1, r.h - 4, 'rgba(255,255,255,0.18)')
 }
@@ -151,27 +151,6 @@ function brushes(ctx: Ctx, c: Cell) {
   px(ctx, c.x + 59, base - 7, 3, 5, '#b2352a')
 }
 
-/** 산수 족자 */
-function scrollPainting(ctx: Ctx, c: Cell, t: number) {
-  const w = 34
-  const h = 50
-  const x = c.x + Math.round((c.w - w) / 2)
-  const y = c.y + 6
-  px(ctx, x - 3, y - 2, w + 6, 3, '#5a4330')
-  px(ctx, x, y, w, h, '#8a6a42')
-  px(ctx, x + 2, y + 1, w - 4, h - 2, '#f4ecd6')
-  for (let i = 0; i < w - 6; i++) {
-    const top = y + 26 - Math.round(Math.max(0, 14 - Math.abs(i - 12) * 1.2))
-    px(ctx, x + 3 + i, top, 1, y + 40 - top, '#9aac7e')
-  }
-  px(ctx, x + 3, y + 40, w - 6, 6, '#98b6b2')
-  px(ctx, x + 3 + Math.round(mod(t * 2, w - 10)), y + 42, 4, 1, '#c4d8d0')
-  disc(ctx, x + w - 9, y + 9, 3, '#d9a441')
-  px(ctx, x - 3, y + h, w + 6, 3, '#5a4330')
-  px(ctx, x - 5, y + h + 1, 2, 2, '#3e2614')
-  px(ctx, x + w + 3, y + h + 1, 2, 2, '#3e2614')
-}
-
 /** 벼루와 연적 */
 function inkstone(ctx: Ctx, c: Cell) {
   const base = c.y + c.h - 4
@@ -211,15 +190,25 @@ function stackedBooks(ctx: Ctx, c: Cell) {
   px(ctx, sx - 1, sy - 3, 11, 4, '#b2352a')
 }
 
+/** 책 앞에 비스듬히 놓인 붓 */
+function brushBeside(ctx: Ctx, c: Cell) {
+  const r = bookRect(c)
+  const x0 = r.x - 8
+  const y0 = c.y + c.h - 5
+  for (let k = 0; k < 34; k++) dot(ctx, x0 + k, Math.round(y0 - k * 0.25), k < 6 ? '#2b1f15' : k > 27 ? '#b2352a' : '#8a6a3a')
+  px(ctx, x0 - 1, y0 - 1, 3, 2, '#2b1f15')
+}
+
 function drawShelf(ctx: Ctx, books: ShelfBook[], t: number) {
   cabinet(ctx)
   books.forEach((b, i) => CELLS.book[i] && book(ctx, CELLS.book[i], b.cover))
-  const [scroll, ink, vase, brush, stack] = [CELLS.things[2], CELLS.things[3], CELLS.things[0], CELLS.things[1], CELLS.things[4]]
+  const [vase, brush, ink, stack] = CELLS.things
   plumVase(ctx, vase, t)
   brushes(ctx, brush)
-  scrollPainting(ctx, scroll, t)
   inkstone(ctx, ink)
   stackedBooks(ctx, stack)
+  // 흰 비단 책(自編詩畫帖) 앞에는 붓 한 자루를 비스듬히 놓는다
+  books.forEach((b, i) => b.cover === 'silk' && CELLS.book[i] && brushBeside(ctx, CELLS.book[i]))
 }
 
 const pct = (v: number, of: number) => `${(v / of) * 100}%`
@@ -250,7 +239,7 @@ export function Shelf({ books, onOpen }: { books: ShelfBook[]; onOpen: (id: Book
       {books.map((b, i) => {
         const r = bookRect(CELLS.book[i])
         const cell = CELLS.book[i]
-        const complete = b.done === b.total
+        const complete = b.total !== undefined && b.done === b.total
         return [
           <span
             key={`${b.id}-p`}
@@ -258,14 +247,14 @@ export function Shelf({ books, onOpen }: { books: ShelfBook[]; onOpen: (id: Book
             aria-hidden
             style={{ right: pct(SW - (cell.x + cell.w) + 3, SW), top: pct(cell.y + 3, SH) }}
           >
-            {b.done} / {b.total}
+            {b.total === undefined ? `${b.done}수` : `${b.done} / ${b.total}`}
           </span>,
           <button
             key={b.id}
             className="shelf-book"
             style={{ left: pct(r.x, SW), top: pct(r.y, SH), width: pct(r.w, SW), height: pct(r.h, SH) }}
             onClick={() => onOpen(b.id)}
-            aria-label={`${b.pre ?? ''} ${b.title} ${b.sub ?? ''} 펼치기, ${b.total}수 중 ${b.done}수 완성`}
+            aria-label={`${b.pre ?? ''} ${b.title} ${b.sub ?? ''} 펼치기, ${b.total === undefined ? `${b.done}수` : `${b.total}수 중 ${b.done}수 완성`}`}
           >
             <span className="shelf-slip han" aria-hidden>
               {b.pre && <small>{b.pre}</small>}

@@ -51,7 +51,6 @@ export default function App() {
     setScreen({ kind: 'play', poemId, run: Date.now() })
   }, [])
 
-  const [bookOpen, setBookOpen] = useState(false)
   /** 마지막 남은 시를 완성한 순간에만 뜨는 상장 */
   const [cert, setCert] = useState(false)
   useEffect(() => {
@@ -99,36 +98,6 @@ export default function App() {
               <li>네 구를 모두 맞히면 완성한 풍경과 함께 원문·번역·해설이 펼쳐집니다.</li>
               <li>완성한 풍경을 보며 「외워 보기」로 빈칸 글자를 채우다 보면 원문이 외워집니다.</li>
             </ol>
-            <p className="about-source">
-              작품 출처 · <span className="han">紫霞 申緯</span>(1769–1847)가 엮은 『<span className="han">唐詩畫意</span>』의 五言·六言 절구, 부록으로 『<span className="han">唐詩三百首</span>』의 名篇
-            </p>
-            <div className="more-row">
-              <button
-                className="link-more"
-                onClick={() => setBookOpen((o) => !o)}
-                aria-expanded={bookOpen}
-                aria-label={bookOpen ? '『唐詩畫意』 설명 접기' : '『唐詩畫意』 설명 펼치기'}
-              >
-                <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M7.5 12h9" />
-                  {!bookOpen && <path d="M12 7.5v9" />}
-                </svg>
-              </button>
-            </div>
-            {bookOpen && (
-              <div className="book-intro">
-                <p>
-                  『<span className="han">唐詩畫意</span>』는 <span className="han">紫霞 申緯</span>(1769–1847)가 그림의 뜻[
-                  <span className="han">畫意</span>]이 살아 있는 당시를 가려 엮은 필사본 시선집입니다. 15권 5책으로, 권두에 申緯의 自序 2편과
-                  徐耕輔·徐淇修의 서문 한 편씩, 모두 4편의 서문이 붙어 있습니다. 이어지는 「例言十五則」과 「畫意總目」에서 시를 가려 뽑은
-                  방법과 원칙, 그리고 시인 118명의 작품 540편이 실렸음을 알 수 있습니다.
-                </p>
-                <p className="small muted">
-                  이 앱에는 그 가운데 卷八·卷九의 五言絶句와 六言絶句 126수를 申緯의 차례대로 실었습니다.
-                </p>
-              </div>
-            )}
             <div className="row center">
               <button className="ghost" onClick={() => setScreen({ kind: 'title' })}>
                 ◁ 처음으로
