@@ -7,8 +7,9 @@ import { sfx } from '../game/sound'
 import type { AnswerLog } from '../game/storage'
 import { MuteButton } from './MuteButton'
 import { HANJA_HUN } from '../data/hanja'
+import { TITLE_KO } from '../data/titles'
 
-type Phase = 'ask' | 'explain'
+type Phase = 'title' | 'ask' | 'explain'
 
 export function sceneFor(poem: Poem, qi: number): Scene {
   return poem.scenes.find((s) => qi >= s.from && qi <= s.to) ?? poem.scenes[poem.scenes.length - 1]
@@ -28,20 +29,21 @@ interface Props {
 export function Play({ poem, onFinish, onExit }: Props) {
   const total = poem.questions.length
   const [qi, setQi] = useState(0)
-  /** 눌러서 훈음을 띄운 글자 (구절 안 위치) */
-  const [gloss, setGloss] = useState<number | null>(null)
-  useEffect(() => setGloss(null), [qi])
+  /** 눌러서 훈음을 띄운 글자 (제목 't3', 구절 'l2' 처럼 자리로 가리킨다) */
+  const [gloss, setGloss] = useState<string | null>(null)
   useEffect(() => {
     if (gloss === null) return
     const close = (e: PointerEvent) => {
-      if (!(e.target as Element).closest?.('.verse-line')) setGloss(null)
+      if (!(e.target as Element).closest?.('.gloss-line')) setGloss(null)
     }
     document.addEventListener('pointerdown', close)
     return () => document.removeEventListener('pointerdown', close)
   }, [gloss])
   const [placedByQ, setPlacedByQ] = useState<(string | null)[]>(() => poem.questions.map(() => null))
   const [order, setOrder] = useState<number[]>([])
-  const [phase, setPhase] = useState<Phase>('ask')
+  // 제목 풀이가 있으면 제목부터 보여 준다
+  const [phase, setPhase] = useState<Phase>(() => (TITLE_KO[poem.id] ? 'title' : 'ask'))
+  useEffect(() => setGloss(null), [qi, phase])
   const [hover, setHover] = useState<number | null>(null)
   const [selected, setSelected] = useState<number | null>(null)
   const [tried, setTried] = useState<number[]>([])
@@ -114,7 +116,9 @@ export function Play({ poem, onFinish, onExit }: Props) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLElement && e.target.closest('button') && e.key === 'Enter') return
-      if (phase === 'ask' && ['1', '2', '3'].includes(e.key)) {
+      if (phase === 'title') {
+        if (e.key === 'Enter') setPhase('ask')
+      } else if (phase === 'ask' && ['1', '2', '3'].includes(e.key)) {
         const i = Number(e.key) - 1
         if (!tried.includes(i)) setSelected(i)
       } else if (e.key === 'Enter') {
@@ -127,6 +131,43 @@ export function Play({ poem, onFinish, onExit }: Props) {
   }, [phase, tried, selected, judge, next])
 
   const poetName = poetNameOf(poem)
+
+  /** 글자마다 눌러서 대표 훈음을 볼 수 있게 한다 */
+  const glossText = (text: string, key: string) =>
+    text.split('').map((ch, k) => {
+      const hun = HANJA_HUN[ch]
+      if (!hun) return <span key={k}>{ch}</span>
+      const id = `${key}${k}`
+      const toggle = () => setGloss(gloss === id ? null : id)
+      return (
+        <span
+          key={k}
+          className={`gch ${gloss === id ? 'on' : ''}`}
+          role="button"
+          tabIndex={0}
+          aria-label={`${ch} ${hun}`}
+          onClick={toggle}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              e.stopPropagation()
+              toggle()
+            }
+          }}
+        >
+          {ch}
+          {gloss === id && (
+            <span className="gtip" role="tooltip">
+              {hun}
+            </span>
+          )}
+        </span>
+      )
+    })
+  const [mainTitle, series] = (() => {
+    const m = poem.title.match(/^(.*?)\s*\((.*)\)$/)
+    return m ? [m[1], m[2]] : [poem.title, '']
+  })()
 
   return (
     <div className="play">
@@ -169,36 +210,25 @@ export function Play({ poem, onFinish, onExit }: Props) {
 
       <section className="console">
         <div className="verse frame paper">
-          <div className="verse-line han" lang="zh-Hant">
-            {q.line.split('').map((ch, k) => {
-              const hun = HANJA_HUN[ch]
-              if (!hun) return <span key={k}>{ch}</span>
-              return (
-                <span
-                  key={k}
-                  className={`gch ${gloss === k ? 'on' : ''}`}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`${ch} ${hun}`}
-                  onClick={() => setGloss(gloss === k ? null : k)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      setGloss(gloss === k ? null : k)
-                    }
-                  }}
-                >
-                  {ch}
-                  {gloss === k && (
-                    <span className="gtip" role="tooltip">
-                      {hun}
-                    </span>
-                  )}
-                </span>
-              )
-            })}
-          </div>
-          {phase === 'ask' ? (
+          {phase === 'title' ? (
+            <>
+              <div className="verse-line gloss-line han" lang="zh-Hant">
+                {glossText(mainTitle, 't')}
+                {series && <span className="title-series"> {series}</span>}
+              </div>
+              <p className="prompt title-ko">{TITLE_KO[poem.id]}</p>
+              <div className="explain">
+                <button className="primary" onClick={() => setPhase('ask')} autoFocus>
+                  첫 구절 ▶
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="verse-line gloss-line han" lang="zh-Hant">
+              {glossText(q.line, 'l')}
+            </div>
+          )}
+          {phase === 'title' ? null : phase === 'ask' ? (
             <>
               <p className="prompt">{q.prompt}</p>
               {feedback && (
@@ -218,6 +248,7 @@ export function Play({ poem, onFinish, onExit }: Props) {
           )}
         </div>
 
+        {phase !== 'title' && (
         <div className="choices" role="group" aria-label="선택지">
           {q.choices.map((c, i) => {
             const isTried = tried.includes(i)
@@ -273,6 +304,7 @@ export function Play({ poem, onFinish, onExit }: Props) {
             )
           })}
         </div>
+        )}
 
         {touchMode && phase === 'ask' && (
           <div className="confirm-row">

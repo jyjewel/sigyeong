@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Poem } from '../data/types'
 import { poetNameOf } from '../data/catalog'
+import { TITLE_KO } from '../data/titles'
 import { PixelView } from './PixelView'
 import { sfx } from '../game/sound'
 import type { AnswerLog } from '../game/storage'
@@ -82,6 +83,7 @@ export function PoemInfo({ poem, onClose }: { poem: Poem; onClose: () => void })
         <h2>
           <span className="han">{poem.title}</span> <span className="han muted">{poetName}</span>
         </h2>
+        {TITLE_KO[poem.id] && <p className="title-ko-info">{TITLE_KO[poem.id]}</p>}
         <p className="muted small">
           {poem.era}
           {poem.form ? ` · ${poem.form}` : ''}

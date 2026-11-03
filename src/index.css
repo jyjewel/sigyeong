@@ -1408,3 +1408,17 @@ a.button {
 .center-text {
   text-align: center;
 }
+
+/* 제목 풀이 (문제 시작 전) */
+.title-series {
+  font-size: 0.55em;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.title-ko {
+  font-size: 1.15rem;
+}
+.title-ko-info {
+  margin: 2px 0 6px;
+  font-weight: 600;
+}
