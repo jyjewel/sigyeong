@@ -1,5 +1,16 @@
 // 제목 풀이. 문제를 풀기 전에 제목과 함께 보여 준다 (한시의 제목은 시가 지어진 계기와 대상을 알려 준다).
 // 괄호 속 연작 이름(藍田溪雜詠 등)은 풀이 끝에 덧붙인다.
+/** '渚亭 (三堂新題二十一詠)' → ['渚亭', '三堂新題二十一詠'] */
+export function splitTitle(title: string): [string, string] {
+  const m = title.match(/^(.*?)\s*\((.*)\)$/)
+  return m ? [m[1], m[2]] : [title, '']
+}
+
+/** 위쪽 막대에 한 줄로 들어가도록 제목 길이에 따라 글자 크기를 고른다 */
+export function titleSize(main: string): string {
+  return main.length <= 4 ? '' : main.length <= 6 ? 'mid' : main.length <= 9 ? 'long' : 'xlong'
+}
+
 export const TITLE_KO: Record<string, string> = {
   hy001: '물결에 몸을 씻는 새',
   hy002: '화자강 — 왕유의 망천 별장에 있는 언덕',

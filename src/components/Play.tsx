@@ -7,7 +7,7 @@ import { sfx } from '../game/sound'
 import type { AnswerLog } from '../game/storage'
 import { MuteButton } from './MuteButton'
 import { HANJA_HUN } from '../data/hanja'
-import { TITLE_KO } from '../data/titles'
+import { TITLE_KO, splitTitle, titleSize } from '../data/titles'
 
 type Phase = 'title' | 'ask' | 'explain'
 
@@ -164,10 +164,7 @@ export function Play({ poem, onFinish, onExit }: Props) {
         </span>
       )
     })
-  const [mainTitle, series] = (() => {
-    const m = poem.title.match(/^(.*?)\s*\((.*)\)$/)
-    return m ? [m[1], m[2]] : [poem.title, '']
-  })()
+  const [mainTitle, series] = splitTitle(poem.title)
 
   return (
     <div className="play">
@@ -175,10 +172,9 @@ export function Play({ poem, onFinish, onExit }: Props) {
         <button className="ghost small" onClick={onExit} aria-label="처음 화면으로">
           ◁ 처음으로
         </button>
-        <h1 className={`poem-title ${poem.title.length > 5 ? 'long' : ''}`}>
-          <span className="han">{poem.title}</span>
-          <span className="sep">/</span>
-          <span className="han poet">{poetName}</span>
+        <h1 className="poem-title stacked">
+          <span className={`han pt-main ${titleSize(splitTitle(poem.title)[0])}`}>{splitTitle(poem.title)[0]}</span>
+          <span className="han pt-poet">{poetName}</span>
           {poem.aiGenerated && <span className="tag soft">AI 생성 · 검토 전</span>}
         </h1>
         <div className="counter">

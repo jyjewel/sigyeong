@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Poem } from '../data/types'
+import { splitTitle, titleSize } from '../data/titles'
 import { poetNameOf } from '../data/catalog'
 import { PixelView } from './PixelView'
 import { layersFor, sceneFor } from './Play'
@@ -95,13 +96,13 @@ export function Recall({ poem, onRound, onExit }: Props) {
         <button className="ghost small" onClick={onExit}>
           ◁ 그만하기
         </button>
-        <h1 className={`poem-title ${poem.title.length > 5 ? 'long' : ''}`}>
-          <span className="han">{poem.title}</span>
-          <span className="sep">/</span>
-          <span className="han poet">{poetName}</span>
+        <h1 className="poem-title stacked">
+          <span className={`han pt-main ${titleSize(splitTitle(poem.title)[0])}`}>{splitTitle(poem.title)[0]}</span>
+          <span className="han pt-poet">{poetName}</span>
         </h1>
         <div className="counter">
-          외워 보기 <span className="num">{round}</span> / {RECALL_ROUNDS}단계
+          <span className="counter-label">외워 보기</span>
+          <span className="num">{round}</span> / {RECALL_ROUNDS}
         </div>
         <MuteButton />
         <ol className="progress" aria-label="구절 진행도">

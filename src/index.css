@@ -1422,3 +1422,43 @@ a.button {
   margin: 2px 0 6px;
   font-weight: 600;
 }
+
+/* 위쪽 막대 제목: 제목 한 줄, 시인은 그 아래 작게 */
+.topbar {
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+}
+.poem-title.stacked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  line-height: 1.15;
+}
+.pt-main {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pt-main.mid {
+  font-size: 0.85em;
+}
+.pt-main.long {
+  font-size: 0.7em;
+}
+.pt-main.xlong {
+  font-size: 0.58em;
+  letter-spacing: 0.02em;
+}
+.pt-poet {
+  margin-top: 2px;
+  font-size: 0.62em;
+  font-weight: 500;
+  opacity: 0.8;
+}
+.counter-label {
+  display: block;
+  font-size: 0.72em;
+  color: var(--ink-soft);
+  line-height: 1.1;
+}
