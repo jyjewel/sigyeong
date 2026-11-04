@@ -15,11 +15,18 @@ const MONK = pal({ K: '#8a7a6a', H: '#8a7a6a', R: '#6a6458', r: '#4e4a40', L: '#
 const MX_WATER = 152
 const MX_PLUM = { x: 86, y: 130 }
 const MX_STONES = [0, 1, 2, 3, 4].map((k) => ({ x: 150 + k * 18, y: 142 + (k % 2) * 3 }))
-const MX_BLOOMS = Array.from({ length: 30 }, (_, i) => {
-  const a = -Math.PI * hash(i * 2.1)
-  const r = 12 + hash(i * 3.7) * 30
-  return { x: MX_PLUM.x + Math.cos(a) * r * 1.3, y: MX_PLUM.y - 40 + Math.sin(a) * r * 0.7 }
-})
+const MX_BRANCHES = [[0, -28, 30, -2.6], [2, -24, 34, -0.5], [0, -14, 22, -2.9], [0, -30, 22, -1.5]] as const
+/** 꽃은 가지를 따라 맺힌다 */
+const MX_BLOOMS = MX_BRANCHES.flatMap(([dx, dy, len, ang], b) =>
+  Array.from({ length: Math.floor((len - 6) / 3) }, (_, k) => {
+    const i = 6 + k * 3
+    const j = hash(b * 31 + k)
+    return {
+      x: MX_PLUM.x + dx + Math.cos(ang) * i + (j - 0.5) * 4,
+      y: MX_PLUM.y + dy + Math.sin(ang) * i + Math.sin(i * 0.5) - 1 - j * 2,
+    }
+  }),
+)
 
 export const meixiBackground: Background = {
   id: 'hy091',
@@ -43,7 +50,7 @@ const MX_YARD = { x: 136, y: 96, w: 144, h: 72 }
 export const MEIXI_SPRITES = [
   sp('mx_plum', '새로 핀 매화', 14, MX_PLUM_F, (ctx, env) => {
     px(ctx, MX_PLUM.x - 3, MX_PLUM.y - 30, 6, 30, '#3a2e2a')
-    for (const [dx, dy, len, ang] of [[0, -28, 30, -2.6], [2, -24, 34, -0.5], [0, -14, 22, -2.9], [0, -30, 22, -1.5]] as const)
+    for (const [dx, dy, len, ang] of MX_BRANCHES)
       for (let i = 0; i < len; i++) px(ctx, MX_PLUM.x + dx + Math.cos(ang) * i, MX_PLUM.y + dy + Math.sin(ang) * i + Math.sin(i * 0.5) * 1, 2, 2, '#3a2e2a')
     MX_BLOOMS.forEach((b, i) => {
       disc(ctx, b.x, b.y, 1, i % 3 ? '#f8f0f0' : '#f4c8d4')
@@ -60,9 +67,11 @@ export const MEIXI_SPRITES = [
     }
   }),
 
-  sp('mx_path', '비스듬한 오솔길 하나', 10, MX_PATH, (ctx) => {
-    for (let t = 0; t <= 1; t += 0.005) px(ctx, 10 + t * 70 + Math.sin(t * 6) * 6, 178 - t * 48, 4 - t * 2, 1, '#c8b88a')
-    standFig(ctx, 44, 120, pal())
+  sp('mx_path', '비스듬한 오솔길 하나', 10, MX_PATH, (ctx, env) => {
+    // 물가 땅(y 124~152) 위로 매화나무 밑까지 비스듬히 오르는 길
+    for (let t = 0; t <= 1; t += 0.004) px(ctx, 2 + t * 80 + Math.sin(t * 6) * 5, 151 - t * 20, 4 - t * 2, 1, '#c8b88a')
+    // 3구에서 돌을 쓸지 말라고 하면 시인은 돌 곁으로 가 있다 (시인은 한 사람만)
+    if (!env.fx.mxStop) standFig(ctx, 34, 119, pal())
   }),
   sp('mx_road', '넓은 큰길', 10, MX_PATH, (ctx) => px(ctx, 0, 136, 150, 12, '#c8b88a')),
   sp('mx_bridge', '돌다리', 10, MX_PATH, (ctx) => {
@@ -70,13 +79,14 @@ export const MEIXI_SPRITES = [
   }),
 
   sp('mx_nosweep', '돌을 쓸지 말게 하는 시인', 22, MX_YARD, (ctx) => {
+    // 비를 세워 든 채 멈춘 아이종과, 손을 들어 말리는 시인
     standFig(ctx, 246, 118, pal({ R: '#6e6450', r: '#544c3c' }), true)
-    for (let i = 0; i < 16; i++) dot(ctx, 244 - i * 0.2, 124 + i, '#6a4a32')
-    px(ctx, 240, 139, 8, 2, '#a8864a')
+    for (let i = 0; i < 18; i++) dot(ctx, 244, 122 + i, '#6a4a32')
+    px(ctx, 242, 138, 5, 3, '#a8864a')
     standFig(ctx, 212, 118, pal())
     for (let i = 0; i < 5; i++) dot(ctx, 226 + i, 126 - i, '#4b5068')
     dot(ctx, 231, 121, '#e6c39b')
-  }),
+  }, { fx: { mxStop: 1 } }),
   sp('mx_sweep', '돌을 깨끗이 쓰는 사람', 22, MX_YARD, (ctx, env) => {
     standFig(ctx, 246, 118, pal({ R: '#6e6450', r: '#544c3c' }), true)
     const s = Math.sin(env.t * 3) * 6
