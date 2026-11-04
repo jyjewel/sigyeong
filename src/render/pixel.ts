@@ -13,6 +13,8 @@ export interface Env {
   wind: number
   /** 레이어들이 장면에 건 상태 플래그 (예: 인물 자세, 배의 움직임) */
   fx: Record<string, number>
+  /** 이 레이어가 방금 장면에 더해졌다면 그 뒤로 흐른 초 (아니면 undefined: 다 자리 잡은 모습) */
+  since?: number
 }
 
 export function px(ctx: Ctx, x: number, y: number, w: number, h: number, color: string) {

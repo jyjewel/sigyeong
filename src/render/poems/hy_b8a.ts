@@ -386,6 +386,8 @@ const LE_HILL_F = { x: 104, y: 60, w: 128, h: 72 }
 
 export const LEYOU_SPRITES = [
   sp('le_uneasy', '해 질 녘 편치 않은 마음', 22, LE_HOME, (ctx, env) => {
+    // 2구에서 시인이 수레를 몰고 떠나면 집 앞에는 남지 않는다
+    if (env.fx.leGone) return
     standFig(ctx, 52, 124, pal())
     const f = mod(env.t * 0.4, 1)
     withAlpha(ctx, 1 - f, () => {
@@ -403,20 +405,25 @@ export const LEYOU_SPRITES = [
     }
   }),
 
-  sp('le_cart', '수레 몰아 오른 옛 언덕', 24, LE_HILL_F, (ctx) => {
-    const x = 160
-    const y = Math.round(leHill(x))
+  sp('le_cart', '수레 몰아 오른 옛 언덕', 24, LE_HILL_F, (ctx, env) => {
+    // 집 앞에서 언덕 꼭대기로 오르는 수레 길
+    for (let t = 0; t <= 1; t += 0.01) px(ctx, 70 + t * 90, 146 - t * 58 + Math.sin(t * 9) * 2, 2, 1, '#8a8264')
+    // 막 고른 순간에는 집 앞에서 출발해 4초 동안 언덕을 오른다
+    const k = env.since === undefined ? 1 : Math.min(1, Math.max(0, (env.since - 0.3) / 4))
+    const e = k * k * (3 - 2 * k)
+    const x = Math.round(70 + e * 90)
+    const y = Math.round(146 - e * 58 + Math.sin(e * 9) * 2)
     pony(ctx, x + 22, y)
     px(ctx, x - 8, y - 12, 18, 8, '#8a5a3a')
     px(ctx, x - 9, y - 14, 20, 2, '#5a3a2a')
     disc(ctx, x, y - 3, 4, '#3a2a1c')
     px(ctx, x + 10, y - 8, 8, 1, '#5a3a2a')
     person(ctx, x - 2, y - 22, '#4b5068')
-  }),
+  }, { fx: { leGone: 1 } }),
   sp('le_walk', '걸어서 강가로', 24, LE_HILL_F, (ctx) => {
     px(ctx, 104, 128, 128, 8, '#8ab4c0')
     person(ctx, 160, 116, '#4b5068')
-  }),
+  }, { fx: { leGone: 1 } }),
   sp('le_boat', '배를 띄움', 24, LE_HILL_F, (ctx) => {
     px(ctx, 104, 126, 128, 10, '#8ab4c0')
     boat(ctx, 168, 130, { len: 22 })

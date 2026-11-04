@@ -102,8 +102,9 @@ export function renderScene(ctx: Ctx, st: SceneState) {
   items.sort((a, b) => a.s.z - b.s.z)
 
   const draw = (it: Item) => {
-    if (it.alpha >= 1) drawSprite(ctx, it.s, env)
-    else if (it.alpha > 0) drawWithAlpha(ctx, it.s, env, it.alpha)
+    const e = st.appear && st.appear.id === it.s.id ? { ...env, since: st.t - st.appear.at } : env
+    if (it.alpha >= 1) drawSprite(ctx, it.s, e)
+    else if (it.alpha > 0) drawWithAlpha(ctx, it.s, e, it.alpha)
   }
 
   ctx.imageSmoothingEnabled = false
