@@ -469,9 +469,10 @@ const NT_HOUSE = { x: 176, y: 34, w: 128, h: 72 }
 
 export const NANTUO_SPRITES = [
   sp('nt_boat', '남쪽 언덕을 떠나는 배', 26, NT_BOAT, (ctx, env) => {
-    const x = 150 + Math.sin(env.t * 0.2) * 10 + 10
-    skiff(ctx, x, 150, env.t, { len: 26 })
-    for (let k = 0; k < 3; k++) px(ctx, x + 16 + k * 8, 152 + k, 6, 1, '#dce8e2')
+    // 남쪽 언덕 앞 물 위로 떠나는 배 (언덕 땅에 얹히지 않게 물 쪽으로)
+    const x = 196 + Math.sin(env.t * 0.2) * 10
+    skiff(ctx, x, 134, env.t, { len: 26 })
+    for (let k = 0; k < 3; k++) px(ctx, x + 16 + k * 8, 136 + k, 6, 1, '#dce8e2')
   }),
   sp('nt_donkey', '나귀 탄 사람', 26, NT_BOAT, (ctx, env) => {
     const x = 120 + mod(env.t * 6, 70)

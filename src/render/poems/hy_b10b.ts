@@ -111,6 +111,8 @@ export const ZHANGYIREN_SPRITES = [
 // ════════════════════════════════════════════════════════════
 const S9_WATER = 100
 const S9_FAR = 120
+/** 건너편 기슭 땅이 끝나는 곳 (가을 풀길이 이 위로 난다) */
+const S9_BANK = 109
 const S9_POET = { x: 40, y: 174 }
 
 export const songluliBackground: Background = {
@@ -118,7 +120,7 @@ export const songluliBackground: Background = {
   drawBack(ctx) {
     sky(ctx, ['#7a8294', '#8a909c', '#a4a4a4'], S9_WATER)
     ridge(ctx, (x) => 86 + 6 * Math.sin(x * 0.02 + 2), '#6a7278', '#747c82', 0, W, S9_WATER)
-    fillRows(ctx, S9_WATER - 4, S9_FAR, () => [0, W], (y) => (y < S9_WATER ? '#7a7a5a' : '#8a96a0'))
+    fillRows(ctx, S9_WATER - 4, S9_FAR, () => [0, W], (y) => (y < S9_BANK ? (y < S9_BANK - 2 ? '#7a7a5a' : '#6e6e52') : '#8a96a0'))
     water(ctx, S9_FAR, 160, '#8a96a0', '#6a7682', '#a8b2b8')
     px(ctx, 0, 160, W, H - 160, '#6a6a4e')
     standFig(ctx, S9_POET.x, S9_POET.y - 22, pal())
@@ -137,7 +139,8 @@ const S9_ROAD = { x: 104, y: 72, w: 192, h: 54 }
 export const SONGLULI_SPRITES = [
   sp('s9_boat', '차가운 조수에 떠나는 손님의 배', 22, S9_RIVER, (ctx, env) => {
     const x = 120 + mod(env.t * 3, 80)
-    skiff(ctx, x, 146, env.t, { guest: '#6a5a7a', len: 24 })
+    // 4구에서 손님이 건너편 풀길을 홀로 걸어가면 배에는 사공만 남는다
+    skiff(ctx, x, 146, env.t, env.fx.s9Ashore ? { len: 24 } : { guest: '#6a5a7a', len: 24 })
     for (let k = 0; k < 6; k++) px(ctx, 90 + mod(k * 30 + env.t * 12, 180), 130 + (k % 3) * 8, 8, 1, '#c8d0d4')
   }),
   sp('s9_fishing', '고기잡이배', 22, S9_RIVER, (ctx, env) => skiff(ctx, 160, 146, env.t, { len: 22 })),
@@ -172,13 +175,15 @@ export const SONGLULI_SPRITES = [
   sp('s9_alone', '하늘에 닿은 가을 풀길을 홀로', 24, S9_ROAD, (ctx, env) => {
     for (let k = 0; k < 40; k++) {
       const x = 104 + hash(k * 1.9) * 200
-      const y = S9_WATER - 3 + hash(k * 2.9) * 18
+      const y = S9_WATER - 2 + hash(k * 2.9) * (S9_BANK - S9_WATER)
       for (let i = 0; i < 4; i++) dot(ctx, x + Math.sin(env.t + k) * (i / 4), y - i, '#b8a060')
     }
-    for (let t = 0; t <= 1; t += 0.01) px(ctx, 130 + t * 160, 112 - t * 14, 2 - t, 1, '#c8b88a')
+    // 건너편 기슭 땅 위로 하늘 끝까지 이어지는 풀길
+    const roadY = (t: number) => S9_BANK - 2 - t * 9
+    for (let t = 0; t <= 1; t += 0.01) px(ctx, 120 + t * 180, roadY(t), 2 - t, 1, '#c8b88a')
     const f = mod(env.t * 0.02, 1)
-    person(ctx, 140 + f * 120, 104 - f * 12, '#6a5a7a')
-  }),
+    person(ctx, 130 + f * 150, roadY(f * 150 / 180 + 10 / 180) - 8, '#6a5a7a')
+  }, { fx: { s9Ashore: 1 } }),
   sp('s9_group', '여럿이 함께', 24, S9_ROAD, (ctx) => {
     for (let k = 0; k < 4; k++) person(ctx, 180 + k * 8, 100, OTHER_PALS[k].R)
   }),

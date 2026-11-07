@@ -27,8 +27,9 @@ export const wuyixiangBackground: Background = {
     sky(ctx, ['#a8bccb', '#b8c6cf', '#c8cfd0', '#d6d4cc'], 100)
     px(ctx, 0, 92, W, WY_GROUND - 92, '#b8b0a0')
     for (let y = WY_GROUND; y < H; y++) px(ctx, 0, y, W, 1, y < 140 ? '#a89e88' : '#9a907a')
-    // 수로
-    fillRows(ctx, 140, 180, () => [0, 120], (y) => (y < 150 ? '#7a9aa8' : '#6a8a98'))
+    // 수로: 주작교 아래를 지나 앞쪽으로 흘러온다
+    fillRows(ctx, 129, 180, (y) => [16 - (y - 129) * 0.3, 104 + (y - 129) * 0.3], (y) => (y < 140 ? '#7a9aa8' : '#6a8a98'))
+    for (let i = 0; i < 10; i++) px(ctx, 24 + hash(i * 3) * 70, 136 + hash(i * 7) * 40, 5, 1, '#9ab8c4')
   },
   drawFront(ctx) {
     // 주작교 (돌다리)
@@ -59,7 +60,8 @@ const wyWildflowers: Sprite = {
   focus: WY_BRIDGE_FOCUS,
   draw(ctx, env) {
     for (let i = 0; i < 40; i++) {
-      const x = 4 + hash(i * 3.1) * 140
+      // 다리 양쪽 물가 땅에만 핀다 (물 위에는 피지 않게)
+      const x = i % 2 ? 2 + hash(i * 3.1) * 12 : 110 + hash(i * 3.1) * 34
       const y = 130 + hash(i * 2.3) * 10
       grassBlade(ctx, x, y, 3 + hash(i) * 4, Math.sin(env.t + i) * 0.6, '#6a8a4a')
       if (i % 3 === 0) flower(ctx, x, y - 4, i % 2 ? '#e8d050' : '#c890d0', '#fff6c8')
