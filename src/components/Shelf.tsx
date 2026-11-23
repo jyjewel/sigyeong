@@ -54,20 +54,20 @@ const bookRect = (c: Cell) => ({ x: c.x + Math.round((c.w - BOOK_W) / 2), y: c.y
 
 const COVERS = {
   indigo: { base: '#2f4466', dark: '#1d2b44', dot: '#3c5478' },
-  ochre: { base: '#a5683a', dark: '#6e4022', dot: '#b87a48' },
-  silk: { base: '#efe9da', dark: '#b9ad92', dot: '#e2dac6' },
+  ochre: { base: '#2f6a6e', dark: '#1d4548', dot: '#3d7e82' },
+  silk: { base: '#f4f5f8', dark: '#b3b9c9', dot: '#e6e9f0' },
 }
 
 function cabinet(ctx: Ctx) {
-  px(ctx, 0, 0, SW, SH, '#2e1c10')
-  px(ctx, 1, 1, SW - 2, SH - 2, '#5b3a22')
-  px(ctx, 2, 2, SW - 4, 1, '#7a5232')
+  px(ctx, 0, 0, SW, SH, '#121a36')
+  px(ctx, 1, 1, SW - 2, SH - 2, '#243461')
+  px(ctx, 2, 2, SW - 4, 1, '#3d4f86')
   for (const c of [...CELLS.book, ...CELLS.things]) {
-    px(ctx, c.x - 1, c.y - 1, c.w + 2, c.h + 2, '#3e2614')
-    for (let y = 0; y < c.h; y++) px(ctx, c.x, c.y + y, c.w, 1, y < 4 ? '#b9a47c' : y < 8 ? '#cbb68c' : '#d6c39a')
+    px(ctx, c.x - 1, c.y - 1, c.w + 2, c.h + 2, '#121a36')
+    for (let y = 0; y < c.h; y++) px(ctx, c.x, c.y + y, c.w, 1, y < 4 ? '#c5cad6' : y < 8 ? '#d3d8e2' : '#e1e5ee')
     // 선반 널
-    px(ctx, c.x, c.y + c.h - 4, c.w, 4, '#8a6240')
-    px(ctx, c.x, c.y + c.h - 4, c.w, 1, '#a87c52')
+    px(ctx, c.x, c.y + c.h - 4, c.w, 4, '#34437a')
+    px(ctx, c.x, c.y + c.h - 4, c.w, 1, '#4f61a0')
   }
 }
 
@@ -79,12 +79,12 @@ function book(ctx: Ctx, c: Cell, cover: ShelfBook['cover']) {
   px(ctx, r.x + 1, r.y + 1, r.w - 2, r.h - 2, k.base)
   for (let y = 3; y < r.h - 2; y += 5) for (let x = 3 + ((y / 5) % 2) * 2; x < r.w - 3; x += 5) dot(ctx, r.x + x, r.y + y, k.dot)
   // 띠지 자리 (글자는 위에 얹는다)
-  px(ctx, r.x + 4, r.y + 4, 13, r.h - 8, '#c9b88e')
-  px(ctx, r.x + 5, r.y + 5, 11, r.h - 10, '#f4ecd6')
+  px(ctx, r.x + 4, r.y + 4, 13, r.h - 8, '#c3c9d8')
+  px(ctx, r.x + 5, r.y + 5, 11, r.h - 10, '#f7f8fb')
   // 실 꿰맨 자리
   for (let i = 0; i < 5; i++) {
     const y = r.y + 5 + i * ((r.h - 10) / 4)
-    const thread = cover === 'silk' ? '#b8a888' : '#e8dcc0'
+    const thread = cover === 'silk' ? '#aab0c2' : '#e8dcc0'
     px(ctx, r.x + r.w - 4, Math.round(y), 1, 1, thread)
     px(ctx, r.x + r.w - 3, Math.round(y), 2, 1, thread)
   }
@@ -145,8 +145,8 @@ function brushes(ctx: Ctx, c: Cell) {
     dot(ctx, x0 + 3 + x, base - 11 + Math.round(Math.abs(x - 5) * 0.5), '#a8c098')
   }
   // 두루마리
-  px(ctx, c.x + 38, base - 9, 22, 9, '#8a6a42')
-  px(ctx, c.x + 39, base - 8, 20, 7, '#efe4c8')
+  px(ctx, c.x + 38, base - 9, 22, 9, '#5a6a9a')
+  px(ctx, c.x + 39, base - 8, 20, 7, '#f1f2f5')
   px(ctx, c.x + 36, base - 7, 3, 5, '#b2352a')
   px(ctx, c.x + 59, base - 7, 3, 5, '#b2352a')
 }
@@ -174,14 +174,14 @@ function stackedBooks(ctx: Ctx, c: Cell) {
   const base = c.y + c.h - 4
   const layers = [
     { x: 6, w: 58, c: '#3a5070', d: '#1d2b44' },
-    { x: 10, w: 52, c: '#8a4a2a', d: '#5a2a14' },
+    { x: 10, w: 52, c: '#7a3446', d: '#4f2230' },
     { x: 14, w: 46, c: '#4f6b3a', d: '#2f4320' },
   ]
   layers.forEach((l, i) => {
     const y = base - 8 * (i + 1)
     px(ctx, c.x + l.x, y, l.w, 8, l.d)
     px(ctx, c.x + l.x + 1, y + 1, l.w - 2, 6, l.c)
-    px(ctx, c.x + l.x + 1, y + 1, l.w - 2, 1, '#efe4c8')
+    px(ctx, c.x + l.x + 1, y + 1, l.w - 2, 1, '#f1f2f5')
   })
   const sx = c.x + 40
   const sy = base - 24 - 11
