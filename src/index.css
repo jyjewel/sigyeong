@@ -1,17 +1,17 @@
 :root {
-  --paper: #f3f4f6;
-  --paper-2: #e6e9ee;
-  --paper-3: #d4d9e2;
-  --ink: #1b2236;
-  --ink-soft: #5b6478;
-  --frame: #1e2b52;
-  --frame-2: #3b4a78;
-  --gold: #4a63b8;
-  --gold-soft: #cfd9f3;
+  --paper: #efe4c8;
+  --paper-2: #e4d6b2;
+  --paper-3: #d6c49a;
+  --ink: #2b1f15;
+  --ink-soft: #5d4a37;
+  --frame: #3b2a1d;
+  --frame-2: #5a4330;
+  --gold: #d9a441;
+  --gold-soft: #f3d58a;
   --red: #b2352a;
   --green: #4f6b3a;
-  --bg: #f1f2f5;
-  --bg-2: #e5e8ee;
+  --bg: #e6d8b6;
+  --bg-2: #ddcca6;
   --han: 'Noto Serif TC', 'Noto Serif KR', 'Songti TC', 'PMingLiU', serif;
   --kr: 'Noto Serif KR', 'Apple SD Gothic Neo', serif;
   color-scheme: light;
@@ -26,7 +26,7 @@ body {
   margin: 0;
   min-height: 100%;
   background: var(--bg);
-  background-image: radial-gradient(circle at 50% 0%, #fbfbfc 0%, var(--bg) 70%);
+  background-image: radial-gradient(circle at 50% 0%, #f1e7cf 0%, var(--bg) 70%);
   color: var(--ink);
   font-family: var(--kr);
   -webkit-tap-highlight-color: transparent;
@@ -49,7 +49,7 @@ a.button {
   transition: transform 0.08s, box-shadow 0.08s, background 0.15s;
 }
 button:hover:not(:disabled) {
-  background: #fafbfd;
+  background: #f7eed6;
 }
 button:active:not(:disabled) {
   transform: translateY(2px);
@@ -67,11 +67,11 @@ button.primary,
 a.button.primary {
   background: var(--frame);
   color: var(--paper);
-  border-color: #121a36;
-  box-shadow: 0 3px 0 #0d1328;
+  border-color: #1b120b;
+  box-shadow: 0 3px 0 #120c07;
 }
 button.primary:hover:not(:disabled) {
-  background: #2d3d6e;
+  background: #4d3826;
 }
 button.ghost {
   background: transparent;
@@ -80,7 +80,7 @@ button.ghost {
   box-shadow: none;
 }
 button.ghost:hover:not(:disabled) {
-  background: rgba(30, 43, 82, 0.08);
+  background: rgba(59, 42, 29, 0.08);
 }
 button.small {
   font-size: 0.85rem;
@@ -122,14 +122,14 @@ img.pixel {
   border: 3px solid var(--frame);
   border-radius: 4px;
   box-shadow:
-    inset 0 0 0 2px #aab4cc,
-    0 4px 0 #0f1630;
+    inset 0 0 0 2px #c9b48a,
+    0 4px 0 #160f0a;
 }
 .paper {
   background: var(--paper);
   background-image:
-    radial-gradient(rgba(80, 95, 140, 0.07) 1px, transparent 1px),
-    radial-gradient(rgba(80, 95, 140, 0.05) 1px, transparent 1px);
+    radial-gradient(rgba(120, 90, 50, 0.07) 1px, transparent 1px),
+    radial-gradient(rgba(120, 90, 50, 0.05) 1px, transparent 1px);
   background-size: 7px 7px, 11px 11px;
   background-position: 0 0, 3px 5px;
 }
@@ -152,7 +152,7 @@ img.pixel {
   top: calc(10px + env(safe-area-inset-top));
   right: 10px;
   z-index: 60;
-  background: rgba(252, 252, 253, 0.85);
+  background: rgba(251, 246, 236, 0.85);
   border-radius: 50%;
 }
 
@@ -206,7 +206,7 @@ img.pixel {
   max-width: 600px;
   width: 100%;
   padding: 24px 24px 20px;
-  background: rgba(252, 252, 253, 0.94);
+  background: rgba(251, 246, 236, 0.94);
   line-height: 1.75;
 }
 .about-title {
@@ -222,7 +222,7 @@ img.pixel {
   margin-bottom: 4px;
 }
 .title-card {
-  background: rgba(252, 252, 253, 0.9);
+  background: rgba(251, 246, 236, 0.9);
 }
 .title-card .big {
   width: 100%;
@@ -288,7 +288,7 @@ img.pixel {
 .counter .num {
   font-size: 1.4em;
   font-weight: 800;
-  color: #2f4390;
+  color: #a06a17;
 }
 .progress {
   grid-area: prog;
@@ -310,12 +310,12 @@ img.pixel {
 }
 .progress li.done {
   background: var(--gold);
-  border-color: #2f4390;
+  border-color: #6b4f1d;
 }
 
 .stage {
   position: relative;
-  background: #0f1630;
+  background: #1a120c;
   padding: 4px;
   margin: 0 auto 12px;
   width: min(100%, calc((100vh - 360px) * 16 / 9));
@@ -328,7 +328,7 @@ img.pixel {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: rgba(16, 22, 48, 0.75);
+  background: rgba(36, 26, 18, 0.75);
   color: var(--paper);
   font-size: 0.75rem;
   padding: 2px 8px;
@@ -356,7 +356,7 @@ img.pixel {
   letter-spacing: 0.06em;
   white-space: nowrap;
   line-height: 1.25;
-  color: #131a30;
+  color: #1d140d;
   word-break: keep-all;
 }
 .verse-line span {
@@ -384,7 +384,7 @@ img.pixel {
   padding: 4px 11px 5px;
   border-radius: 6px;
   background: var(--frame);
-  color: #f4f6fb;
+  color: #fbf6ea;
   font-family: var(--kr);
   font-size: 1rem;
   font-weight: 700;
@@ -498,10 +498,10 @@ img.pixel {
   border-color: var(--gold);
   box-shadow:
     inset 0 0 0 2px var(--gold-soft),
-    0 0 0 3px rgba(74, 99, 184, 0.45),
-    0 6px 0 #0f1630;
+    0 0 0 3px rgba(217, 164, 65, 0.45),
+    0 6px 0 #160f0a;
   transform: translateY(-3px);
-  background: #eef2fb;
+  background: #f8efd7;
 }
 .card.tried {
   opacity: 0.45;
@@ -518,8 +518,8 @@ img.pixel {
   border-color: var(--gold);
   box-shadow:
     inset 0 0 0 2px var(--gold-soft),
-    0 0 0 3px rgba(74, 99, 184, 0.6),
-    0 4px 0 #0f1630;
+    0 0 0 3px rgba(217, 164, 65, 0.6),
+    0 4px 0 #160f0a;
   opacity: 1 !important;
 }
 .card.dim {
@@ -544,7 +544,7 @@ img.pixel {
 }
 .extra-body {
   border: 2px solid var(--frame-2);
-  background: #0f1630;
+  background: #1a120c;
   min-height: 84px;
   display: grid;
   place-items: center;
@@ -629,7 +629,7 @@ img.pixel {
   right: clamp(12px, 4vw, 56px);
   writing-mode: vertical-rl;
   padding: 22px 18px;
-  background-color: rgba(244, 245, 247, 0.96);
+  background-color: rgba(239, 228, 200, 0.96);
   border: 3px solid var(--frame);
   box-shadow: 0 6px 0 rgba(0, 0, 0, 0.4);
   font-size: clamp(1.1rem, 2.6vh, 1.7rem);
@@ -712,7 +712,7 @@ img.pixel {
   position: fixed;
   inset: 0;
   z-index: 70;
-  background: rgba(8, 11, 24, 0.7);
+  background: rgba(10, 6, 3, 0.7);
   display: grid;
   place-items: center;
   padding: 16px;
@@ -809,7 +809,7 @@ img.pixel {
   opacity: 1;
   filter: none;
   border: 2px solid var(--gold);
-  background: #eef2fb;
+  background: #fbf3dc;
 }
 .badge-icon {
   width: 34px;
@@ -862,7 +862,7 @@ img.pixel {
 .thumb.empty {
   display: grid;
   place-items: center;
-  background: #26325c;
+  background: #3e2e20;
   color: var(--paper-3);
   font-size: 1.6rem;
   font-family: var(--han);
@@ -1005,7 +1005,7 @@ img.pixel {
 }
 .recall-line .slot.now {
   border-bottom-color: var(--gold);
-  background: rgba(74, 99, 184, 0.22);
+  background: rgba(217, 164, 65, 0.22);
   animation: pulse 1.2s infinite;
 }
 .recall-line .slot.filled {
@@ -1246,7 +1246,7 @@ img.pixel {
   display: block;
   width: 100%;
   height: 100%;
-  box-shadow: 0 6px 0 #151d3a;
+  box-shadow: 0 6px 0 #2e1c10;
 }
 .shelf-book {
   position: absolute;
@@ -1312,8 +1312,8 @@ img.pixel {
   position: absolute;
   font-size: 0.72rem;
   padding: 0 5px;
-  background: rgba(248, 249, 251, 0.92);
-  border: 1px solid #5a6a9a;
+  background: rgba(244, 236, 214, 0.92);
+  border: 1px solid #8a6a42;
   border-radius: 2px;
   color: var(--ink);
   pointer-events: none;
@@ -1352,7 +1352,7 @@ img.pixel {
   font-family: var(--han);
   font-size: 1.15rem;
   color: var(--ink);
-  background: #fbfcfd;
+  background: #fbf6e8;
   border: 2px solid var(--frame-2);
   border-radius: 3px;
   padding: 8px 10px;
